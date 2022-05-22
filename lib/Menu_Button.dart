@@ -6,7 +6,7 @@ class MenuButton extends StatelessWidget {
   final String text;
 
   MenuButton({
-    this.image,
+    @required this.image,
     @required this.text,
   });
 

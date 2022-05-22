@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "867104632010",
+    "firebase_url": "https://project-dequeue-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "project-dequeue",
+    "storage_bucket": "project-dequeue.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867104632010:android:a1c23ad030dcb451775833",
+        "android_client_info": {
+          "package_name": "com.example.first_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867104632010-l2gpat2t7ed4uv7rtb1aseua067aon2a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUezQvmFosONmNcXC4LT6Dtf1X_YXwWxY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867104632010-l2gpat2t7ed4uv7rtb1aseua067aon2a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

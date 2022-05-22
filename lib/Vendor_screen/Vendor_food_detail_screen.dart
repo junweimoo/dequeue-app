@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../DUMMY_FOOD.dart';
+import '../Food_menu.dart';
 
 class FoodDetailScreen extends StatelessWidget {
   //const FoodDetailScreen({ Key? key }) : super(key: key);
@@ -23,7 +23,7 @@ class FoodDetailScreen extends StatelessWidget {
             onPressed: () {
               showDialog(
                   context: context,
-                  builder: (BuildContext context) {
+                  builder: (ctx) {
                     return Dialog(
                       child: Container(
                         child: Column(
@@ -43,7 +43,7 @@ class FoodDetailScreen extends StatelessWidget {
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
-                        height: MediaQuery.of(context).size.height / 2,
+                        height: MediaQuery.of(ctx).size.height / 2,
                         alignment: Alignment.center,
                       ),
                     );
@@ -54,11 +54,11 @@ class FoodDetailScreen extends StatelessWidget {
         ],
       ),
       body: Column(
-        children: [
+          /* children: [
           Image.network(food.image),
           Text(food.price.toString()),
-        ],
-      ),
+        ], */
+          ),
     );
   }
 }

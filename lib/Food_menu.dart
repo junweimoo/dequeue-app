@@ -1,9 +1,39 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'Food.dart';
 
 class FoodMenu with ChangeNotifier {
-  static final DUMMY_FOOD = [
+  List<Food> menuList;
+
+  Stream<List<Food>> readFoodMenu() {
+    return FirebaseFirestore.instance.collection('Food_items').snapshots().map(
+        (snapshot) =>
+            snapshot.docs.map((doc) => Food.fromJson(doc.data())).toList());
+  }
+
+  void addMenu(String name, double price, String ImageUrl) {
+    var client = http.Client();
+    try {
+      final url = Uri.https(
+          'project-dequeue-default-rtdb.asia-southeast1.firebasedatabase.app',
+          'food_menu.json');
+    } catch (error) {}
+  }
+
+  Future<Food> findByName(String name) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Food_items')
+        .where('name', isEqualTo: name)
+        .limit(1)
+        .get();
+    print(snapshot);
+  }
+
+  /* static final DUMMY_FOOD = [
     Food(
       name: 'Spaghetti with Tomato Sauce',
       image:
@@ -64,9 +94,6 @@ class FoodMenu with ChangeNotifier {
           'https://cdn.pixabay.com/photo/2018/04/09/18/26/asparagus-3304997_1280.jpg',
       price: 30,
     ),
-  ];
+  ]; */
 
-  Food findByName(String name) {
-    return DUMMY_FOOD.firstWhere((food) => food.name == name);
-  }
 }

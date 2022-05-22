@@ -1,15 +1,18 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:first_app/DUMMY_FOOD.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'Vendor_screen/Vendor_menu_screen.dart';
 import 'Vendor_screen/Vendor_orders_screen.dart';
 import './Account_screen.dart';
 import 'Vendor_screen/Vendor_food_detail_screen.dart';
+import 'Food_menu.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [ChangeNotifierProvider(create: ((context) => FoodMenu()))],
     child: MyApp(),
@@ -63,7 +66,45 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: _currIndex == 0
             ? [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                              title: Text('Add Menu'),
+                              content: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Form(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextFormField(
+                                        decoration:
+                                            InputDecoration(labelText: 'Name'),
+                                      ),
+                                      TextFormField(
+                                        decoration:
+                                            InputDecoration(labelText: 'Price'),
+                                      ),
+                                      SizedBox(height: 10),
+                                      ElevatedButton(
+                                        onPressed: () {},
+                                        child: Text('Add image'),
+                                      ),
+                                      SizedBox(height: 50),
+                                      ElevatedButton(
+                                        onPressed: () {},
+                                        child: Text('Submit'),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.white,
+                                          onPrimary: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ));
+                  },
                   icon: Icon(Icons.add),
                 ),
               ]
