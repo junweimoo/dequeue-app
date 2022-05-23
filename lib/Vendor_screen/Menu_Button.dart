@@ -1,13 +1,13 @@
 import 'package:first_app/Vendor_screen/Vendor_food_detail_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../Food.dart';
+
 class MenuButton extends StatelessWidget {
-  final String image;
-  final String text;
+  final Food food;
 
   MenuButton({
-    @required this.image,
-    @required this.text,
+    @required this.food,
   });
 
   @override
@@ -24,20 +24,20 @@ class MenuButton extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed(
               FoodDetailScreen.routeName,
-              arguments: text,
+              arguments: food,
             );
           },
           child: Column(
             children: [
               Image.network(
-                image,
+                food.image,
                 fit: BoxFit.fitWidth,
                 height: 80,
               ),
               Expanded(
                 child: FittedBox(
                   child: Container(
-                    child: Text(text),
+                    child: Text(food.name),
                     margin: EdgeInsets.all(5),
                   ),
                   fit: BoxFit.contain,

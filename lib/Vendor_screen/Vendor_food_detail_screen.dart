@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../Food_menu.dart';
+import 'package:first_app/Food.dart';
 
 class FoodDetailScreen extends StatelessWidget {
   //const FoodDetailScreen({ Key? key }) : super(key: key);
@@ -9,13 +8,12 @@ class FoodDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foodName = ModalRoute.of(context).settings.arguments as String;
-    final food =
-        Provider.of<FoodMenu>(context, listen: false).findByName(foodName);
+    final food = ModalRoute.of(context).settings.arguments as Food;
+
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(
-          child: Text(foodName),
+          child: Text(food.name),
           fit: BoxFit.contain,
         ),
         actions: [
@@ -54,11 +52,11 @@ class FoodDetailScreen extends StatelessWidget {
         ],
       ),
       body: Column(
-          /* children: [
+        children: [
           Image.network(food.image),
           Text(food.price.toString()),
-        ], */
-          ),
+        ],
+      ),
     );
   }
 }

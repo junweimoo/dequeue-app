@@ -1,22 +1,21 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'Vendor_screen/Vendor_menu_screen.dart';
 import 'Vendor_screen/Vendor_orders_screen.dart';
 import './Account_screen.dart';
 import 'Vendor_screen/Vendor_food_detail_screen.dart';
-import 'Food_menu.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: ((context) => FoodMenu()))],
+  /* runApp(MultiProvider(
+    providers: [],
     child: MyApp(),
-  ));
+  )); */
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

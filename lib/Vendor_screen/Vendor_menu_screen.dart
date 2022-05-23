@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../Food_menu.dart';
-import '../Menu_Button.dart';
-import '../Food_menu.dart';
+import 'Menu_Button.dart';
 import '../Food.dart';
 
 class VendorMenu extends StatefulWidget {
@@ -14,21 +12,30 @@ class VendorMenu extends StatefulWidget {
 }
 
 class _VendorMenuState extends State<VendorMenu> {
+  final Stream<QuerySnapshot> food_list =
+      FirebaseFirestore.instance.collection('Food_items').snapshots();
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Food>>(
-        stream: readFoodMenu(),
+    return StreamBuilder<QuerySnapshot>(
+        stream: food_list,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('something went wrong');
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
           } else {
-            return GridView(
-              children: snapshot.data
-                  .map((food) => MenuButton(
-                        text: food.name,
-                        image: food.image,
-                      ))
-                  .toList(),
+            final data = snapshot.requireData;
+            return GridView.builder(
+              itemCount: data.size,
+              itemBuilder: (ctx, index) {
+                return MenuButton(
+                  food: Food(
+                      name: data.docs[index]['name'],
+                      image: data.docs[index]['imageUrl'],
+                      price: data.docs[index]['price'].toDouble()),
+                );
+              },
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 3 / 2,
                 crossAxisCount: 2,
@@ -37,12 +44,5 @@ class _VendorMenuState extends State<VendorMenu> {
             );
           }
         });
-  }
-
-  Stream<List<Food>> readFoodMenu() {
-    print(FirebaseFirestore.instance.collection('Food_items'));
-    return FirebaseFirestore.instance.collection('Food_items').snapshots().map(
-        (snapshot) =>
-            snapshot.docs.map((doc) => Food.fromJson(doc.data())).toList());
   }
 }
