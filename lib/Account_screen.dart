@@ -18,7 +18,7 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
           const CircleAvatar(
             radius: 50,
-            backgroundImage: const NetworkImage(
+            backgroundImage: NetworkImage(
                 'https://knowyourcustomer.com/wp-content/uploads/2021/04/blank-profile-picture-973460_640.png'),
           ),
           const SizedBox(
@@ -26,13 +26,13 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
           const Text(
             'Account',
-            style: const TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20),
           ),
           const SizedBox(
             height: 50,
           ),
           Container(
-            child: Card(
+            child: GestureDetector(
               child: InkWell(
                 child: Row(
                   children: [
@@ -52,17 +52,18 @@ class _AccountScreenState extends State<AccountScreen> {
             height: 60,
             width: double.infinity,
           ),
-          const SizedBox(
-            height: 5,
+          Divider(
+            height: 0,
+            thickness: 1,
           ),
           Container(
-            child: Card(
+            child: GestureDetector(
               child: InkWell(
                 child: Row(
                   children: [
                     const Text(
                       'Settings',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 25,
                       ),
                     ),

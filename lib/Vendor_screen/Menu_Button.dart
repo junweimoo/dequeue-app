@@ -15,7 +15,7 @@ class MenuButton extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(8.0),
       child: Card(
-        elevation: 8,
+        elevation: 3,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -31,7 +31,7 @@ class MenuButton extends StatelessWidget {
             children: [
               Image.network(
                 food.image,
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.cover,
                 height: 80,
               ),
               Expanded(

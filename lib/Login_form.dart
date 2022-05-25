@@ -1,21 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 
 import 'Vendor_screen/Vendor_main.dart';
-import 'Login_page.dart';
 
 class LoginForm extends StatefulWidget {
   //const LoginForm({ Key? key }) : super(key: key);
-  Function callback;
+  Function toggleLoginSignup;
 
-  LoginForm(this.callback);
+  LoginForm(this.toggleLoginSignup);
 
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final _auth = FirebaseAuth.instance;
+  final _formkey = GlobalKey<FormState>();
   var _selectedIndex = 0;
+  String _email;
+  String _password;
+
+  void _trysubmit() {
+    final _allEntryValid = _formkey.currentState.validate();
+    FocusScope.of(context).unfocus();
+
+    if (_allEntryValid) {
+      _formkey.currentState.save();
+      _auth.signInWithEmailAndPassword(
+        email: _email.trim(),
+        password: _password.trim(),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +67,25 @@ class _LoginFormState extends State<LoginForm> {
                 selectedIndex: _selectedIndex),
             TextFormField(
               decoration: const InputDecoration(
-                labelText: 'Username',
+                labelText: 'Email address',
               ),
+              validator: (value) {
+                if (value.isEmpty || !value.contains('@')) {
+                  return 'Please enter a valid email address';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _email = value;
+              },
             ),
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Password',
               ),
+              onSaved: (value) {
+                _password = value;
+              },
             ),
             const SizedBox(
               height: 30,
@@ -74,9 +103,7 @@ class _LoginFormState extends State<LoginForm> {
               child: const Text('Login'),
             ),
             TextButton(
-              onPressed: () {
-                widget.callback();
-              },
+              onPressed: widget.toggleLoginSignup,
               child: const Text('Don\'t have an account yet?'),
             ),
           ],
