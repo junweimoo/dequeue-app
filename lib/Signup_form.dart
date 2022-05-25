@@ -105,7 +105,6 @@ class _SignupFormState extends State<SignupForm> {
               onChanged: (value) {
                 setState(() {
                   dropdownValue = value;
-                  print(dropdownValue);
                 });
               },
             ),
