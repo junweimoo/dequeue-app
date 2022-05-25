@@ -21,9 +21,9 @@ class _VendorMenuState extends State<VendorMenu> {
         stream: food_list,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('something went wrong');
+            return const Text('something went wrong');
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else {
             final data = snapshot.requireData;
             return GridView.builder(
@@ -36,7 +36,7 @@ class _VendorMenuState extends State<VendorMenu> {
                       price: data.docs[index]['price'].toDouble()),
                 );
               },
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 3 / 2,
                 crossAxisCount: 2,
               ),

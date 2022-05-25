@@ -28,15 +28,15 @@ class FoodDetailScreen extends StatelessWidget {
                           children: [
                             TextButton(
                               onPressed: () {},
-                              child: Text('Edit name'),
+                              child: const Text('Edit name'),
                             ),
                             TextButton(
                               onPressed: () {},
-                              child: Text('Edit price'),
+                              child: const Text('Edit price'),
                             ),
                             TextButton(
                               onPressed: () {},
-                              child: Text('Edit photo'),
+                              child: const Text('Edit photo'),
                             )
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +47,7 @@ class FoodDetailScreen extends StatelessWidget {
                     );
                   });
             },
-            icon: Icon(Icons.mode_edit_outline),
+            icon: const Icon(Icons.mode_edit_outline),
           ),
         ],
       ),

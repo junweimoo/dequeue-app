@@ -38,7 +38,7 @@ class MenuButton extends StatelessWidget {
                 child: FittedBox(
                   child: Container(
                     child: Text(food.name),
-                    margin: EdgeInsets.all(5),
+                    margin: const EdgeInsets.all(5),
                   ),
                   fit: BoxFit.contain,
                 ),

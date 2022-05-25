@@ -13,22 +13,22 @@ class _AccountScreenState extends State<AccountScreen> {
     return Container(
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
-          CircleAvatar(
+          const CircleAvatar(
             radius: 50,
-            backgroundImage: NetworkImage(
+            backgroundImage: const NetworkImage(
                 'https://knowyourcustomer.com/wp-content/uploads/2021/04/blank-profile-picture-973460_640.png'),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
-          Text(
+          const Text(
             'Account',
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Container(
@@ -36,13 +36,13 @@ class _AccountScreenState extends State<AccountScreen> {
               child: InkWell(
                 child: Row(
                   children: [
-                    Text(
+                    const Text(
                       'Edit profile',
                       style: TextStyle(
                         fontSize: 25,
                       ),
                     ),
-                    Icon(Icons.person_pin_rounded),
+                    const Icon(Icons.person_pin_rounded),
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                 ),
@@ -52,7 +52,7 @@ class _AccountScreenState extends State<AccountScreen> {
             height: 60,
             width: double.infinity,
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Container(
@@ -60,13 +60,13 @@ class _AccountScreenState extends State<AccountScreen> {
               child: InkWell(
                 child: Row(
                   children: [
-                    Text(
+                    const Text(
                       'Settings',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 25,
                       ),
                     ),
-                    Icon(Icons.settings_outlined),
+                    const Icon(Icons.settings_outlined),
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                 ),
