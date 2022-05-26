@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'Vendor_screen/Vendor_main.dart';
 
@@ -17,26 +17,46 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _auth = FirebaseAuth.instance;
   final _formkey = GlobalKey<FormState>();
-  var _selectedIndex = 0;
   String _email;
   String _password;
 
-  void _trysubmit() {
+  void _trysubmit() async {
     final _allEntryValid = _formkey.currentState.validate();
     FocusScope.of(context).unfocus();
 
     if (_allEntryValid) {
       _formkey.currentState.save();
-      _auth.signInWithEmailAndPassword(
+      await _auth
+          .signInWithEmailAndPassword(
         email: _email.trim(),
         password: _password.trim(),
-      );
+      )
+          .then((value) async {
+        if (value == null) {
+          //TODO: warn user of errors
+        } else {
+          DocumentReference documentReference = FirebaseFirestore.instance
+              .collection('users')
+              .doc(value.user.uid);
+          String userType;
+          await documentReference.get().then((snapshot) {
+            Map<String, dynamic> data = snapshot.data();
+            userType = data['type'];
+          });
+          if (userType == 'customer') {
+            //TODO: move to customer screen
+          } else {
+            Navigator.of(context).popAndPushNamed(VendorHomePage.routeName);
+          }
+        }
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formkey,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 40,
@@ -44,27 +64,6 @@ class _LoginFormState extends State<LoginForm> {
         ),
         child: Column(
           children: [
-            FlutterToggleTab(
-                width: 40,
-                height: 20,
-                labels: const [
-                  "Customer",
-                  "Vendor",
-                ],
-                selectedLabelIndex: (index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                },
-                selectedTextStyle: const TextStyle(
-                    color: Colors.white,
-                    //fontSize: 18,
-                    fontWeight: FontWeight.w700),
-                unSelectedTextStyle: const TextStyle(
-                    color: Colors.black87,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500),
-                selectedIndex: _selectedIndex),
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Email address',
@@ -86,20 +85,15 @@ class _LoginFormState extends State<LoginForm> {
               onSaved: (value) {
                 _password = value;
               },
+              validator: (value) {
+                return null;
+              },
             ),
             const SizedBox(
               height: 30,
             ),
             ElevatedButton(
-              onPressed: () {
-                if (_selectedIndex == 1) {
-                  Navigator.of(context).popAndPushNamed(
-                    VendorHomePage.routeName,
-                  );
-                } else {
-                  //add customer home screen
-                }
-              },
+              onPressed: _trysubmit,
               child: const Text('Login'),
             ),
             TextButton(

@@ -23,7 +23,9 @@ class _VendorMenuState extends State<VendorMenu> {
           if (snapshot.hasError) {
             return const Text('something went wrong');
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return Center(
+              child: const CircularProgressIndicator(),
+            );
           } else {
             final data = snapshot.requireData;
             return GridView.builder(

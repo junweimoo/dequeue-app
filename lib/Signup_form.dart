@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/services.dart';
 
 class SignupForm extends StatefulWidget {
   //const SignupForm({ Key? key }) : super(key: key);
@@ -19,17 +21,45 @@ class _SignupFormState extends State<SignupForm> {
   String _email = '';
   String _username = '';
   String _password = '';
-  String dropdownValue;
+  String dropdownValue = null;
 
-  void _trysubmit() {
-    final _allEntryValid = _formkey.currentState.validate();
-    FocusScope.of(context).unfocus();
+  void _trysubmit() async {
+    try {
+      if (dropdownValue == null) {
+        return;
+      }
+      final _allEntryValid = _formkey.currentState.validate();
+      FocusScope.of(context).unfocus();
+      UserCredential _authresult;
 
-    if (_allEntryValid) {
-      _formkey.currentState.save();
-      _auth.createUserWithEmailAndPassword(
-        email: _email.trim(),
-        password: _password.trim(),
+      if (_allEntryValid) {
+        _formkey.currentState.save();
+        _authresult = await _auth.createUserWithEmailAndPassword(
+          email: _email.trim(),
+          password: _password.trim(),
+        );
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_authresult.user.uid)
+            .set({
+          'email': _email,
+          'username': _username,
+          'type': dropdownValue,
+        });
+      }
+    } on FirebaseAuthException catch (error) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          content: Text(error.code.toString()),
+        ),
+      );
+    } catch (error) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          content: Text(error.toString()),
+        ),
       );
     }
   }
@@ -95,16 +125,27 @@ class _SignupFormState extends State<SignupForm> {
             const SizedBox(
               height: 20,
             ),
-            CustomDropdownButton2(
-              hint: 'Register as',
+            DropdownButtonFormField2(
+              hint: Text('Register as'),
               value: dropdownValue,
-              dropdownItems: [
-                'Customer',
-                'Vendor',
+              items: [
+                DropdownMenuItem(
+                  child: Text('Customer'),
+                  value: 'customer',
+                ),
+                DropdownMenuItem(
+                  child: Text('Vendor'),
+                  value: 'vendor',
+                ),
               ],
               onChanged: (value) {
                 setState(() {
-                  dropdownValue = value;
+                  dropdownValue = value as String;
+                });
+              },
+              onSaved: (value) {
+                setState(() {
+                  dropdownValue = value.toString();
                 });
               },
             ),
