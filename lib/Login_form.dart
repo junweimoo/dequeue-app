@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'Vendor_screen/Vendor_main.dart';
+import './Vendor_screens/Vendor_main.dart';
+import './Customer_screens/Customer_main.dart';
 
 class LoginForm extends StatefulWidget {
   //const LoginForm({ Key? key }) : super(key: key);
@@ -44,7 +45,7 @@ class _LoginFormState extends State<LoginForm> {
             userType = data['type'];
           });
           if (userType == 'customer') {
-            //TODO: move to customer screen
+            Navigator.of(context).popAndPushNamed(CustomerHomePage.routeName);
           } else {
             Navigator.of(context).popAndPushNamed(VendorHomePage.routeName);
           }

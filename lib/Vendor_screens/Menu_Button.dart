@@ -1,7 +1,7 @@
-import 'package:first_app/Vendor_screen/Vendor_food_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../Food.dart';
+import './Vendor_food_detail_screen.dart';
 
 class MenuButton extends StatelessWidget {
   final Food food;
