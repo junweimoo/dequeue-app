@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import './Vendor_screens/Vendor_food_detail_screen.dart';
+import 'Food_detail_screen.dart';
 import './Vendor_screens/Vendor_main.dart';
 import './Customer_screens/Customer_main.dart';
 import './Login_page.dart';

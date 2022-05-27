@@ -1,8 +1,8 @@
-import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../Order.dart';
-import '../DUMMY_ORDERS.dart';
+import '../Food.dart';
 
 class OrderQueue extends StatefulWidget {
   //const Queue({ Key? key }) : super(key: key);
@@ -12,22 +12,28 @@ class OrderQueue extends StatefulWidget {
 }
 
 class _OrderQueueState extends State<OrderQueue> {
-  Queue<Order> queue = dummyOrders;
-
-  void addNewOrder(Order order) {
-    setState(() {
-      queue.add(order);
-    });
-  }
+  final Stream<QuerySnapshot> order_list =
+      FirebaseFirestore.instance.collection('orders').snapshots();
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: queue
-            .map(
-              (order) => Container(
+    return StreamBuilder<QuerySnapshot>(
+      stream: order_list,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text('something went wrong');
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          final data = snapshot.requireData;
+          return ListView.builder(
+            itemCount: data.size,
+            itemBuilder: (ctx, index) {
+              final order =
+                  Order(name: data.docs[index]['foodName'], notes: '');
+              return Container(
                 child: Card(
                   child: Column(
                     children: [
@@ -78,11 +84,7 @@ class _OrderQueueState extends State<OrderQueue> {
                                   fontSize: 20,
                                 ),
                               ),
-                              onTap: () {
-                                setState(() {
-                                  queue.removeFirst();
-                                });
-                              },
+                              onTap: () {},
                             ),
                           ),
                           color: Colors.orange,
@@ -98,10 +100,12 @@ class _OrderQueueState extends State<OrderQueue> {
                 ),
                 height: 200,
                 width: double.infinity,
-              ),
-            )
-            .toList(),
-      ),
+              );
+            },
+            shrinkWrap: true,
+          );
+        }
+      },
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../Account_screen.dart';
+import './Customer_menu_screen.dart';
+import './Customer_order_screen.dart';
 
 class CustomerHomePage extends StatefulWidget {
   static const routeName = '/customer-home';
@@ -18,8 +20,8 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   ];
 
   static List<Widget> screens = <Widget>[
-    //CustomerMenu(),
-    //OrderQueue(),
+    CustomerMenuScreen(),
+    CustomerOrderScreen(),
     AccountScreen(),
   ];
 
@@ -34,54 +36,8 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_TITLE[_currIndex]),
-        actions: _currIndex == 0
-            ? [
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (ctx) => AlertDialog(
-                              title: const Text('Add Menu'),
-                              content: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Form(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextFormField(
-                                        decoration: const InputDecoration(
-                                            labelText: 'Name'),
-                                      ),
-                                      TextFormField(
-                                        decoration: const InputDecoration(
-                                            labelText: 'Price'),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ElevatedButton(
-                                        onPressed: () {},
-                                        child: const Text('Add image'),
-                                      ),
-                                      const SizedBox(height: 50),
-                                      ElevatedButton(
-                                        onPressed: () {},
-                                        child: const Text('Submit'),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.white,
-                                          onPrimary: Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ));
-                  },
-                  icon: const Icon(Icons.add),
-                ),
-              ]
-            : [],
       ),
-      body: AccountScreen(),
+      body: screens[_currIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currIndex,
         onTap: onTap,
