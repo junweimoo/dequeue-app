@@ -33,9 +33,11 @@ class _VendorMenuState extends State<VendorMenu> {
             itemBuilder: (ctx, index) {
               return MenuButton(
                 food: Food(
-                    name: data.docs[index]['name'],
-                    image: data.docs[index]['imageUrl'],
-                    price: data.docs[index]['price'].toDouble()),
+                  name: data.docs[index]['name'],
+                  image: data.docs[index]['imageUrl'],
+                  price: data.docs[index]['price'].toDouble(),
+                ),
+                foodId: data.docs[index].id.toString(),
               );
             },
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

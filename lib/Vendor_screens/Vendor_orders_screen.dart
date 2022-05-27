@@ -12,8 +12,10 @@ class OrderQueue extends StatefulWidget {
 }
 
 class _OrderQueueState extends State<OrderQueue> {
-  final Stream<QuerySnapshot> order_list =
-      FirebaseFirestore.instance.collection('orders').snapshots();
+  final Stream<QuerySnapshot> order_list = FirebaseFirestore.instance
+      .collection('orders')
+      .orderBy('createdTime', descending: false)
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -58,34 +60,33 @@ class _OrderQueueState extends State<OrderQueue> {
                           ),
                         ],
                       ),
-                      order.notes == null
-                          ? const Text(
-                              'Notes:',
-                              style: TextStyle(fontSize: 20),
-                            )
-                          : Text(
-                              'Notes: \n${order.notes}',
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
+                      Text(
+                        'Notes: \n${order.notes}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
                       Container(
                         height: 50,
                         width: 100,
                         child: Card(
+                          child: InkWell(
+                            onTap: () {},
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Done',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                  ),
+                                ),
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                            ),
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Center(
-                            child: InkWell(
-                              child: const Text(
-                                'Done',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
-                              onTap: () {},
-                            ),
                           ),
                           color: Colors.orange,
                         ),

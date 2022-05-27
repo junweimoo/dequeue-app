@@ -5,9 +5,11 @@ import '../Food_detail_screen.dart';
 
 class MenuButton extends StatelessWidget {
   final Food food;
+  final String foodId;
 
   MenuButton({
     @required this.food,
+    @required this.foodId,
   });
 
   @override
@@ -24,7 +26,7 @@ class MenuButton extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed(
               FoodDetailScreen.routeName,
-              arguments: [food, 'vendor'],
+              arguments: [food, foodId, 'vendor'],
             );
           },
           child: Column(

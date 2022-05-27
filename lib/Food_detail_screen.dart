@@ -50,6 +50,7 @@ class FoodDetailScreen extends StatelessWidget {
         'foodId': foodId,
         'foodName': food.name,
         'notes': '',
+        'createdTime': Timestamp.now(),
         //need pass in userId as well
       });
     }
