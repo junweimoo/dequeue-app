@@ -26,25 +26,17 @@ class LoginPageState extends State<LoginPage> {
         child: Card(
           margin: const EdgeInsets.all(40),
           child: SingleChildScrollView(
-            child: _showLoginForm
-                ? Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        Text("Login"),
-                        LoginForm(toggleLoginSignup),
-                      ],
-                    ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        Text('Sign up'),
-                        SignupForm(toggleLoginSignup),
-                      ],
-                    ),
-                  ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  _showLoginForm ? const Text("Login") : const Text('Sign up'),
+                  _showLoginForm
+                      ? LoginForm(toggleLoginSignup)
+                      : SignupForm(toggleLoginSignup),
+                ],
+              ),
+            ),
           ),
         ),
       ),
