@@ -5,6 +5,7 @@ import 'Signup_form.dart';
 
 class LoginPage extends StatefulWidget {
   //const LoginPage({Key key}) : super(key: key);
+  static const routeName = '/login-page';
 
   @override
   State<LoginPage> createState() => LoginPageState();

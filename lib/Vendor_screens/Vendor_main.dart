@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import './Vendor_menu_screen.dart';
@@ -6,6 +7,7 @@ import '../Account_screen.dart';
 
 class VendorHomePage extends StatefulWidget {
   static const routeName = '/Vendor-home';
+
   @override
   State<VendorHomePage> createState() => _VendorHomePageState();
 }
@@ -19,12 +21,6 @@ class _VendorHomePageState extends State<VendorHomePage> {
     'Account',
   ];
 
-  static List<Widget> screens = <Widget>[
-    VendorMenu(),
-    OrderQueue(),
-    AccountScreen(),
-  ];
-
   void onTap(int i) {
     setState(() {
       _currIndex = i;
@@ -33,6 +29,12 @@ class _VendorHomePageState extends State<VendorHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> screens = <Widget>[
+      VendorMenu(),
+      OrderQueue(),
+      AccountScreen(),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_TITLE[_currIndex]),

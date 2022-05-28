@@ -22,35 +22,25 @@ class _LoginFormState extends State<LoginForm> {
   String _password;
 
   void _trysubmit() async {
-    final _allEntryValid = _formkey.currentState.validate();
-    FocusScope.of(context).unfocus();
+    try {
+      final _allEntryValid = _formkey.currentState.validate();
+      FocusScope.of(context).unfocus();
 
-    if (_allEntryValid) {
-      _formkey.currentState.save();
-      await _auth
-          .signInWithEmailAndPassword(
-        email: _email.trim(),
-        password: _password.trim(),
-      )
-          .then((value) async {
-        if (value == null) {
-          //TODO: warn user of errors
-        } else {
-          DocumentReference documentReference = FirebaseFirestore.instance
-              .collection('users')
-              .doc(value.user.uid);
-          String userType;
-          await documentReference.get().then((snapshot) {
-            Map<String, dynamic> data = snapshot.data();
-            userType = data['type'];
-          });
-          if (userType == 'customer') {
-            Navigator.of(context).popAndPushNamed(CustomerHomePage.routeName);
-          } else {
-            Navigator.of(context).popAndPushNamed(VendorHomePage.routeName);
-          }
-        }
-      });
+      if (_allEntryValid) {
+        _formkey.currentState.save();
+        await _auth.signInWithEmailAndPassword(
+          email: _email.trim(),
+          password: _password.trim(),
+        );
+      }
+    } catch (error) {
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                content: Text(
+                  error.toString(),
+                ),
+              ));
     }
   }
 

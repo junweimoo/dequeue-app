@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/services.dart';
+
+import 'Customer_screens/Customer_main.dart';
+import 'Vendor_screens/Vendor_main.dart';
 
 class SignupForm extends StatefulWidget {
   //const SignupForm({ Key? key }) : super(key: key);
@@ -47,18 +48,13 @@ class _SignupFormState extends State<SignupForm> {
           'type': dropdownValue,
         });
       }
-    } on FirebaseAuthException catch (error) {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          content: Text(error.code.toString()),
-        ),
-      );
     } catch (error) {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          content: Text(error.toString()),
+          content: Text(
+            error.toString(),
+          ),
         ),
       );
     }

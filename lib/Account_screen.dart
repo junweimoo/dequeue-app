@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:first_app/Login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'Login_page.dart';
 
 class AccountScreen extends StatefulWidget {
   //const AccountScreen({ Key? key }) : super(key: key);
@@ -9,6 +13,26 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  Map<String, dynamic> currUserInfo;
+
+  void _getInfo() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((snapshot) {
+      setState(() {
+        currUserInfo = snapshot.data();
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    _getInfo();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,8 +49,8 @@ class _AccountScreenState extends State<AccountScreen> {
         const SizedBox(
           height: 30,
         ),
-        const Text(
-          'Account',
+        Text(
+          currUserInfo['username'],
           style: TextStyle(fontSize: 20),
         ),
         const SizedBox(
@@ -123,7 +147,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                 ],
               ),
-              onTap: () {},
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+              },
             ),
           ),
           height: 60,
