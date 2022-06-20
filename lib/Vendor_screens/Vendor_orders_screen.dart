@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../Order.dart';
 import '../Food.dart';
@@ -14,6 +15,9 @@ class OrderQueue extends StatefulWidget {
 class _OrderQueueState extends State<OrderQueue> {
   final Stream<QuerySnapshot> order_list = FirebaseFirestore.instance
       .collection('orders')
+      .where("vendorId",
+          isEqualTo: FirebaseAuth.instance.currentUser.uid.toString())
+      .where("done", isEqualTo: false)
       .orderBy('createdTime', descending: false)
       .snapshots();
 
@@ -33,8 +37,7 @@ class _OrderQueueState extends State<OrderQueue> {
           return ListView.builder(
             itemCount: data.size,
             itemBuilder: (ctx, index) {
-              final order =
-                  Order(name: data.docs[index]['foodName'], notes: '');
+              final order = data.docs[index];
               return Container(
                 child: Card(
                   child: Column(
@@ -48,7 +51,7 @@ class _OrderQueueState extends State<OrderQueue> {
                             ),
                             child: Container(
                               child: Text(
-                                order.name,
+                                order["foodName"],
                                 style: const TextStyle(
                                   fontSize: 25,
                                 ),
@@ -61,7 +64,7 @@ class _OrderQueueState extends State<OrderQueue> {
                         ],
                       ),
                       Text(
-                        'Notes: \n${order.notes}',
+                        'Notes: \n${order["notes"]}',
                         style: const TextStyle(
                           fontSize: 20,
                         ),
@@ -71,7 +74,11 @@ class _OrderQueueState extends State<OrderQueue> {
                         width: 100,
                         child: Card(
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              order.reference.update({
+                                "done": true,
+                              });
+                            },
                             child: Column(
                               children: [
                                 Text(

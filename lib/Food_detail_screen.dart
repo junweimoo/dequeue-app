@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'Food.dart';
 
@@ -9,10 +10,12 @@ class FoodDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final User user = FirebaseAuth.instance.currentUser;
     final List args = ModalRoute.of(context).settings.arguments as List;
     final Food food = args[0];
     final String foodId = args[1];
     final String type = args[2];
+    final String vendorId = args[3];
 
     void editItem() {
       showDialog(
@@ -51,7 +54,9 @@ class FoodDetailScreen extends StatelessWidget {
         'foodName': food.name,
         'notes': '',
         'createdTime': Timestamp.now(),
-        //need pass in userId as well
+        'done': false,
+        'userId': user.uid,
+        'vendorId': vendorId,
       });
     }
 

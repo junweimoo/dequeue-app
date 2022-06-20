@@ -11,7 +11,7 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('hello'),
+      child: Text('Coming soon...'),
     );
   }
 }

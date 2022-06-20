@@ -1,14 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'Food_detail_screen.dart';
 import './Vendor_screens/Vendor_main.dart';
 import './Customer_screens/Customer_main.dart';
-import './Login_page.dart';
+import './Login_signup_page.dart';
+import 'Customer_screens/food_stalls_screen.dart';
+import 'Customer_screens/Customer_menu_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,51 +37,14 @@ class MyApp extends StatelessWidget {
         if (appSnapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
             title: 'Test',
-            home: StreamBuilder(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, userSnapshot) {
-                if (userSnapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (userSnapshot.hasData) {
-                  String userType;
-                  //print(userSnapshot.data.uid);
-                  FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(userSnapshot.data.uid)
-                      .snapshots()
-                      .first
-                      .then((snapshot) {
-                    userType = snapshot.data()['type'];
-                    //print(userType);
-                  });
-                  if (userType == 'customer') {
-                    return CustomerHomePage();
-                  } else {
-                    return VendorHomePage();
-                  }
-                  /* String userType;
-                  documentReference.get().then((snapshot) {
-                    Map<String, dynamic> data = snapshot.data();
-                    userType = data['type'];
-                  });
-                  print(userType);
-                  if (userType == 'customer') {
-                    return CustomerHomePage();
-                  } else {
-                    return VendorHomePage();
-                  } */
-                }
-                return LoginPage();
-              },
-            ),
+            home: LoginPage(),
             routes: {
               FoodDetailScreen.routeName: (ctx) => FoodDetailScreen(),
               VendorHomePage.routeName: (ctx) => VendorHomePage(),
               CustomerHomePage.routeName: (ctx) => CustomerHomePage(),
               LoginPage.routeName: (ctx) => LoginPage(),
+              FoodStallList.routeName: (ctx) => FoodStallList(),
+              CustomerMenuScreen.routeName: (ctx) => CustomerMenuScreen(),
             },
           );
         }

@@ -6,7 +6,7 @@ import './Vendor_orders_screen.dart';
 import '../Account_screen.dart';
 
 class VendorHomePage extends StatefulWidget {
-  static const routeName = '/Vendor-home';
+  static const routeName = '/vendor-home';
 
   @override
   State<VendorHomePage> createState() => _VendorHomePageState();

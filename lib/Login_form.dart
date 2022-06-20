@@ -28,10 +28,18 @@ class _LoginFormState extends State<LoginForm> {
 
       if (_allEntryValid) {
         _formkey.currentState.save();
-        await _auth.signInWithEmailAndPassword(
+        final user = await _auth.signInWithEmailAndPassword(
           email: _email.trim(),
           password: _password.trim(),
         );
+        if (user != null) {
+          String userType = await getUserType(user.user.uid);
+          if (userType == "customer") {
+            Navigator.of(context).pushNamed('/customer-home');
+          } else if (userType == "vendor") {
+            Navigator.of(context).pushNamed('/vendor-home');
+          }
+        }
       }
     } catch (error) {
       showDialog(
@@ -42,6 +50,13 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ));
     }
+  }
+
+  Future<String> getUserType(userId) async {
+    DocumentSnapshot ds =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    Map<String, dynamic> data = ds.data() as Map<String, dynamic>;
+    return data["type"];
   }
 
   @override

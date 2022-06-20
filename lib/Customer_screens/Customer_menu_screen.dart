@@ -6,91 +6,101 @@ import '../Food.dart';
 
 class CustomerMenuScreen extends StatefulWidget {
   //const CustomerMenuScreen({Key key}) : super(key: key);
+  static const routeName = '/food-stalls-menu';
 
   @override
   State<CustomerMenuScreen> createState() => _CustomerMenuScreenState();
 }
 
 class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
-  final Stream<QuerySnapshot> food_list =
-      FirebaseFirestore.instance.collection('Food_items').snapshots();
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          decoration: InputDecoration(
-            hintText: 'Search',
-            prefixIcon: Icon(Icons.search),
+    final List args = ModalRoute.of(context).settings.arguments as List;
+    final String vendorId = args[0];
+    final Stream<QuerySnapshot> food_list = FirebaseFirestore.instance
+        .collection('Food_items')
+        .where("vendorId", isEqualTo: vendorId)
+        .snapshots();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Menu"),
+      ),
+      body: Column(
+        children: [
+          const TextField(
+            decoration: InputDecoration(
+              hintText: 'Search',
+              prefixIcon: Icon(Icons.search),
+            ),
           ),
-        ),
-        StreamBuilder<QuerySnapshot>(
-          stream: food_list,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Text('something went wrong');
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              final data = snapshot.requireData;
-              return Expanded(
-                child: ListView.builder(
-                  itemCount: data.size,
-                  itemBuilder: (ctx, index) {
-                    return Card(
-                      child: InkWell(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                data.docs[index]['name'],
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
+          StreamBuilder<QuerySnapshot>(
+            stream: food_list,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text('something went wrong');
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                final data = snapshot.requireData;
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: data.size,
+                    itemBuilder: (ctx, index) {
+                      return Card(
+                        child: InkWell(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  data.docs[index]['name'],
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Image.network(
-                              data.docs[index]['imageUrl'],
-                              height: 150,
-                              fit: BoxFit.contain,
-                            ),
-                          ],
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                        ),
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            FoodDetailScreen.routeName,
-                            arguments: [
-                              Food(
-                                image: data.docs[index]['imageUrl'],
-                                name: data.docs[index]['name'],
-                                price: data.docs[index]['price'].toDouble(),
+                              Image.network(
+                                data.docs[index]['imageUrl'],
+                                height: 150,
+                                fit: BoxFit.contain,
                               ),
-                              data.docs[index].id,
-                              'customer',
                             ],
-                          );
-                        },
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      color: Color.fromARGB(173, 255, 255, 255),
-                    );
-                  },
-                  shrinkWrap: true,
-                  padding: EdgeInsets.all(10),
-                ),
-              );
-            }
-          },
-        ),
-      ],
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              FoodDetailScreen.routeName,
+                              arguments: [
+                                Food(
+                                  image: data.docs[index]['imageUrl'],
+                                  name: data.docs[index]['name'],
+                                  price: data.docs[index]['price'].toDouble(),
+                                ),
+                                data.docs[index].id,
+                                'customer',
+                                vendorId,
+                              ],
+                            );
+                          },
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        color: const Color.fromARGB(173, 255, 255, 255),
+                      );
+                    },
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(10),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

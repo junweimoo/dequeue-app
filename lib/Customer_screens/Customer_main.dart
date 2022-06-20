@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../Account_screen.dart';
 import './Customer_menu_screen.dart';
 import './Customer_order_screen.dart';
+import './Customer_canteens_screen.dart';
 
 class CustomerHomePage extends StatefulWidget {
   static const routeName = '/customer-home';
@@ -29,7 +30,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> screens = <Widget>[
-      CustomerMenuScreen(),
+      CanteenList(),
       CustomerOrderScreen(),
       AccountScreen(),
     ];
