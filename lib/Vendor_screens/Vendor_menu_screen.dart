@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'Menu_Button.dart';
 import '../Food.dart';
@@ -12,8 +13,11 @@ class VendorMenu extends StatefulWidget {
 }
 
 class _VendorMenuState extends State<VendorMenu> {
-  final Stream<QuerySnapshot> food_list =
-      FirebaseFirestore.instance.collection('Food_items').snapshots();
+  final Stream<QuerySnapshot> food_list = FirebaseFirestore.instance
+      .collection('Food_items')
+      .where("vendorId",
+          isEqualTo: FirebaseAuth.instance.currentUser.uid.toString())
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {

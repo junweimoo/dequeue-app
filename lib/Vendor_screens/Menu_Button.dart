@@ -36,9 +36,14 @@ class MenuButton extends StatelessWidget {
           },
           child: Column(
             children: [
-              Image.network(
-                food.image,
-                fit: BoxFit.cover,
+              Container(
+                child: ClipRRect(
+                  child: Image.network(
+                    food.image,
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 height: 80,
               ),
               Expanded(
@@ -51,6 +56,7 @@ class MenuButton extends StatelessWidget {
                 ),
               ),
             ],
+            crossAxisAlignment: CrossAxisAlignment.stretch,
           ),
         ),
       ),

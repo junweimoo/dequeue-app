@@ -3,7 +3,7 @@ import 'package:first_app/Login_signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'Login_signup_page.dart';
+import './Login_signup_page.dart';
 
 class AccountScreen extends StatefulWidget {
   //const AccountScreen({ Key? key }) : super(key: key);
@@ -156,7 +156,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                     onTap: () {
                       FirebaseAuth.instance.signOut();
-                      Navigator.of(context).pop();
+                      Navigator.of(context)
+                          .pushReplacementNamed(LoginPage.routeName);
                     },
                   ),
                 ),

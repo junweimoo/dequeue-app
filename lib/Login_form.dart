@@ -35,9 +35,9 @@ class _LoginFormState extends State<LoginForm> {
         if (user != null) {
           String userType = await getUserType(user.user.uid);
           if (userType == "customer") {
-            Navigator.of(context).pushNamed('/customer-home');
+            Navigator.of(context).pushReplacementNamed('/customer-home');
           } else if (userType == "vendor") {
-            Navigator.of(context).pushNamed('/vendor-home');
+            Navigator.of(context).pushReplacementNamed('/vendor-home');
           }
         }
       }

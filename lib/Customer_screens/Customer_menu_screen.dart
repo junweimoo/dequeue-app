@@ -22,9 +22,6 @@ class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
         .where("vendorId", isEqualTo: vendorId)
         .snapshots();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Menu"),
-      ),
       body: Column(
         children: [
           const TextField(
@@ -62,13 +59,18 @@ class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
                                   ),
                                 ),
                               ),
-                              Image.network(
-                                data.docs[index]['imageUrl'],
+                              Container(
+                                child: ClipRRect(
+                                  child: Image.network(
+                                    data.docs[index]['imageUrl'],
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                                 height: 150,
-                                fit: BoxFit.contain,
                               ),
                             ],
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                           ),
                           onTap: () {
                             Navigator.of(context).pushNamed(
