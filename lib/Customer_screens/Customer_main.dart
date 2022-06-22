@@ -45,7 +45,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.fastfood_outlined),
-            label: 'Menu',
+            label: 'Food',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.library_books_outlined),
