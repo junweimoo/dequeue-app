@@ -69,33 +69,31 @@ class _OrderQueueState extends State<OrderQueue> {
                           fontSize: 20,
                         ),
                       ),
-                      Container(
-                        height: 50,
-                        width: 100,
-                        child: Card(
-                          child: InkWell(
-                            onTap: () {
-                              order.reference.update({
-                                "done": true,
-                              });
+                      ElevatedButton(
+                        onPressed: () {
+                          order.reference.update(
+                            {
+                              "done": true,
                             },
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Done',
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                  ),
-                                ),
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                          );
+                        },
+                        child: Text(
+                          "Done",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+                          ),
+                        ),
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
                             ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                          backgroundColor: MaterialStateProperty.all(
+                            Colors.orange.withOpacity(0.9),
                           ),
-                          color: Colors.orange,
                         ),
                       )
                     ],

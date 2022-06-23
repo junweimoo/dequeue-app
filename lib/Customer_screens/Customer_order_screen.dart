@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'Customer_order_widget.dart';
+
 class CustomerOrderScreen extends StatefulWidget {
   //const CustomerOrderScreen({Key key}) : super(key: key);
 
@@ -29,42 +31,57 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
           );
         } else {
           final data = snapshot.requireData;
-          return ListView.builder(
-            itemCount: data.size,
-            itemBuilder: (ctx, index) {
-              final order = data.docs[index];
-              return Container(
-                child: Card(
-                  child: Column(
-                    children: [
-                      Padding(
-                        child: Text(
-                          "${order["foodName"]}",
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Ongoing"),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
                           ),
                         ),
-                        padding: EdgeInsets.all(10),
                       ),
-                    ],
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    ),
+                    padding: EdgeInsets.only(
+                      left: 5,
+                    ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  Padding(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Completed"),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    padding: EdgeInsets.only(
+                      left: 5,
+                    ),
                   ),
-                  color: const Color.fromARGB(173, 255, 255, 255),
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: data.size,
+                  itemBuilder: (ctx, index) {
+                    final order = data.docs[index];
+                    return Customer_order_widget(order);
+                  },
+                  shrinkWrap: true,
                 ),
-                height: 200,
-                width: double.infinity,
-                margin: EdgeInsets.only(
-                  left: 10,
-                  top: 15,
-                  right: 10,
-                ),
-              );
-            },
-            shrinkWrap: true,
+              ),
+            ],
           );
         }
       },
