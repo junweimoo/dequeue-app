@@ -16,7 +16,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   int _currIndex = 0;
 
   static const _TITLE = [
-    'Menu',
+    'Canteens',
     'Orders',
     'Account',
   ];

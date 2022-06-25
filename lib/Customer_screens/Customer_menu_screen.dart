@@ -13,25 +13,37 @@ class CustomerMenuScreen extends StatefulWidget {
 }
 
 class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
+  TextEditingController _searchController = TextEditingController();
+  String searchText = '';
+
   @override
   Widget build(BuildContext context) {
     final List args = ModalRoute.of(context).settings.arguments as List;
     final String vendorId = args[0];
-    final Stream<QuerySnapshot> food_list = FirebaseFirestore.instance
+    final Stream<QuerySnapshot> foodList = FirebaseFirestore.instance
         .collection('Food_items')
         .where("vendorId", isEqualTo: vendorId)
         .snapshots();
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Menu"),
+      ),
       body: Column(
         children: [
-          const TextField(
-            decoration: InputDecoration(
-              hintText: 'Search',
+          TextField(
+            controller: _searchController,
+            onChanged: (value) {
+              setState(() {
+                searchText = value;
+              });
+            },
+            decoration: const InputDecoration(
+              hintText: 'Search...',
               prefixIcon: Icon(Icons.search),
             ),
           ),
           StreamBuilder<QuerySnapshot>(
-            stream: food_list,
+            stream: foodList,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return const Text('something went wrong');
@@ -41,9 +53,18 @@ class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
                 );
               } else {
                 final data = snapshot.requireData;
+                List documents = data.docs;
+                if (searchText.length > 0) {
+                  documents = documents.where((element) {
+                    return element['name']
+                        .toString()
+                        .toLowerCase()
+                        .contains(searchText.toLowerCase());
+                  }).toList();
+                }
                 return Expanded(
                   child: ListView.builder(
-                    itemCount: data.size,
+                    itemCount: documents.length,
                     itemBuilder: (ctx, index) {
                       return Card(
                         child: InkWell(
@@ -52,7 +73,7 @@ class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Text(
-                                  data.docs[index]['name'],
+                                  documents[index]['name'],
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
@@ -62,7 +83,7 @@ class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
                               Container(
                                 child: ClipRRect(
                                   child: Image.network(
-                                    data.docs[index]['imageUrl'],
+                                    documents[index]['imageUrl'],
                                     fit: BoxFit.cover,
                                   ),
                                   borderRadius: BorderRadius.circular(10),
@@ -77,11 +98,11 @@ class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
                               FoodDetailScreen.routeName,
                               arguments: [
                                 Food(
-                                  image: data.docs[index]['imageUrl'],
-                                  name: data.docs[index]['name'],
-                                  price: data.docs[index]['price'].toDouble(),
+                                  image: documents[index]['imageUrl'],
+                                  name: documents[index]['name'],
+                                  price: documents[index]['price'].toDouble(),
                                 ),
-                                data.docs[index].id,
+                                documents[index].id,
                                 'customer',
                                 vendorId,
                               ],

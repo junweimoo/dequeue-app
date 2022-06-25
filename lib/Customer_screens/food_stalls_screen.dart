@@ -11,6 +11,7 @@ class FoodStallList extends StatefulWidget {
 }
 
 class _FoodStallListState extends State<FoodStallList> {
+
   @override
   Widget build(BuildContext context) {
     final List args = ModalRoute.of(context).settings.arguments as List;
