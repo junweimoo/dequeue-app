@@ -6,9 +6,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../Food.dart';
 
-class CustomerFoodDetail extends StatelessWidget {
-  //const FoodDetailScreen({ Key? key }) : super(key: key);
+class CustomerFoodDetail extends StatefulWidget {
+  //const LoginForm({ Key? key }) : super(key: key);
   static const routeName = '/customer-food-detail';
+
+  @override
+  State<CustomerFoodDetail> createState() => _CustomerFoodDetailState();
+}
+
+class _CustomerFoodDetailState extends State<CustomerFoodDetail> {
+  String notes;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +30,7 @@ class CustomerFoodDetail extends StatelessWidget {
       FirebaseFirestore.instance.collection('orders').doc().set({
         'foodId': foodId,
         'foodName': food.name,
-        'notes': '',
+        'notes': notes,
         'createdTime': Timestamp.now(),
         'done': false,
         'userId': user.uid,
@@ -50,6 +57,7 @@ class CustomerFoodDetail extends StatelessWidget {
                 child: Image.network(food.image),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     height: 50,
@@ -84,14 +92,20 @@ class CustomerFoodDetail extends StatelessWidget {
                 ],
               ),
               Container(
-                margin: EdgeInsets.all(15),
-                child: TextField(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                ),
+                margin: EdgeInsets.all(10),
+                child: TextFormField(
+                  onChanged: (value) {
+                    notes = value;
+                  },
                   decoration: InputDecoration(
-                    hintText: "Type your notes to vendor here",
+                    hintText: "Type your notes to the vendor here",
                   ),
                   maxLines: 3,
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 18,
                   ),
                 ),
               ),
