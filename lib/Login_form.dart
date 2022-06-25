@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './Vendor_screens/Vendor_main.dart';
 import './Customer_screens/Customer_main.dart';
@@ -34,9 +35,12 @@ class _LoginFormState extends State<LoginForm> {
         );
         if (user != null) {
           String userType = await getUserType(user.user.uid);
+          final prefs = await SharedPreferences.getInstance();
           if (userType == "customer") {
+            await prefs.setString("userType", "customer");
             Navigator.of(context).pushReplacementNamed('/customer-home');
           } else if (userType == "vendor") {
+            await prefs.setString("userType", "vendor");
             Navigator.of(context).pushReplacementNamed('/vendor-home');
           }
         }

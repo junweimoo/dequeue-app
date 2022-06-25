@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Food_detail_screen.dart';
 import './Vendor_screens/Vendor_main.dart';
@@ -10,20 +12,35 @@ import './Login_signup_page.dart';
 import 'Customer_screens/food_stalls_screen.dart';
 import 'Customer_screens/Customer_menu_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String userType = await prefs.getString("userType");
   /* runApp(MultiProvider(
     providers: [],
     child: MyApp(),
   )); */
-  runApp(MyApp());
+  runApp(MyApp(userType));
 }
 
 class MyApp extends StatelessWidget {
+  final String userType;
+
+  const MyApp(this.userType);
+
   static Future<FirebaseApp> initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
     return firebaseApp;
+  }
+
+  Widget getHomePage() {
+    var currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      return userType == "customer" ? CustomerHomePage() : VendorHomePage();
+    } else {
+      return LoginPage();
+    }
   }
 
   @override
@@ -37,7 +54,7 @@ class MyApp extends StatelessWidget {
         if (appSnapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
             title: 'Test',
-            home: LoginPage(),
+            home: getHomePage(),
             routes: {
               FoodDetailScreen.routeName: (ctx) => FoodDetailScreen(),
               VendorHomePage.routeName: (ctx) => VendorHomePage(),
