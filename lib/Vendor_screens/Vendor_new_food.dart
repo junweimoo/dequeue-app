@@ -14,7 +14,7 @@ class NewFoodDialog extends StatefulWidget {
 
 class _NewFoodDialogState extends State<NewFoodDialog> {
   String _foodName;
-  String _price;
+  double _price;
 
   _trySubmit() {
     print(_foodName);
@@ -51,7 +51,7 @@ class _NewFoodDialogState extends State<NewFoodDialog> {
               ),
               TextFormField(
                 onChanged: (value) {
-                  _price = value;
+                  _price = double.parse(value.replaceAll(",",""));;
                 },
                 decoration: InputDecoration(
                   prefixText: NumberFormat
