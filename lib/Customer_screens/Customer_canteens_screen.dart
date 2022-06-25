@@ -33,7 +33,7 @@ class _CanteenListState extends State<CanteenList> {
               return Container(
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(
+                    Navigator.of(context).pushReplacementNamed(
                       FoodStallList.routeName,
                       arguments: [data.docs[index].id],
                     );

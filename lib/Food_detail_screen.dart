@@ -60,9 +60,8 @@ class FoodDetailScreen extends StatelessWidget {
         'userId': user.uid,
         'vendorId': vendorId,
       });
-      Navigator.pushNamed(
+      Navigator.pushReplacementNamed(
         context, CustomerHomePage.routeName,
-        arguments: [1]
       );
     }
 

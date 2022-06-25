@@ -74,7 +74,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         Text(
                           'Edit profile',
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                         Spacer(),
@@ -107,7 +107,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         Text(
                           'Settings',
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                         Spacer(),
@@ -140,7 +140,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         Text(
                           'Logout',
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                             color: Colors.red,
                           ),
                         ),

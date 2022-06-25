@@ -13,17 +13,20 @@ class CustomerOrderScreen extends StatefulWidget {
 }
 
 class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
-  final Stream<QuerySnapshot> order_list = FirebaseFirestore.instance
+  final Stream<QuerySnapshot> orderList = FirebaseFirestore.instance
       .collection('orders')
       .where("userId",
           isEqualTo: FirebaseAuth.instance.currentUser.uid.toString())
       .orderBy('createdTime', descending: true)
       .snapshots();
+
+  bool showOngoing = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-        stream: order_list,
+        stream: orderList,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('something went wrong');
@@ -33,14 +36,22 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
             );
           } else {
             final data = snapshot.requireData;
+            List documents = data.docs;
+            documents = documents.where((element) {
+              return showOngoing ? !element['done'] : element['done'];
+            }).toList();
             return Column(
               children: [
                 Row(
                   children: [
                     Padding(
                       child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text("Ongoing"),
+                        onPressed: () {
+                          setState(() {
+                            showOngoing = true;
+                          });
+                        },
+                        child: const Text("Ongoing"),
                         style: ButtonStyle(
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -50,14 +61,18 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
                           ),
                         ),
                       ),
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                         left: 5,
                       ),
                     ),
                     Padding(
                       child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text("Completed"),
+                        onPressed: () {
+                          setState(() {
+                            showOngoing = false;
+                          });
+                        },
+                        child: const Text("Completed"),
                         style: ButtonStyle(
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -67,7 +82,7 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
                           ),
                         ),
                       ),
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                         left: 5,
                       ),
                     ),
@@ -75,9 +90,9 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: data.size,
+                    itemCount: documents.length,
                     itemBuilder: (ctx, index) {
-                      final order = data.docs[index];
+                      final order = documents[index];
                       return Customer_order_widget(order);
                     },
                     shrinkWrap: true,
