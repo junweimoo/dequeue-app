@@ -1,7 +1,7 @@
+import 'package:first_app/Customer_screens/Customer_food_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../Food_detail_screen.dart';
 import '../Food.dart';
 
 class CustomerMenuScreen extends StatefulWidget {
@@ -95,7 +95,7 @@ class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
                           ),
                           onTap: () {
                             Navigator.of(context).pushNamed(
-                              FoodDetailScreen.routeName,
+                              CustomerFoodDetail.routeName,
                               arguments: [
                                 Food(
                                   image: documents[index]['imageUrl'],

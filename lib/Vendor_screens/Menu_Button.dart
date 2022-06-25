@@ -1,7 +1,7 @@
+import 'package:first_app/Vendor_screens/Vendor_food_detail.dart';
 import 'package:flutter/material.dart';
 
 import '../Food.dart';
-import '../Food_detail_screen.dart';
 
 class MenuButton extends StatelessWidget {
   final Food food;
@@ -25,7 +25,7 @@ class MenuButton extends StatelessWidget {
         child: InkWell(
           onTap: () {
             Navigator.of(context).pushNamed(
-              FoodDetailScreen.routeName,
+              VendorFoodDetail.routeName,
               arguments: [
                 food,
                 foodId,

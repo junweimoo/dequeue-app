@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'Food.dart';
+import '../Food.dart';
 
-class FoodDetailScreen extends StatelessWidget {
+class VendorFoodDetail extends StatelessWidget {
   //const FoodDetailScreen({ Key? key }) : super(key: key);
-  static const routeName = '/food-detail';
+  static const routeName = '/vendor-food-detail';
 
   @override
   Widget build(BuildContext context) {
@@ -50,21 +50,6 @@ class FoodDetailScreen extends StatelessWidget {
       );
     }
 
-    void orderItem() {
-      FirebaseFirestore.instance.collection('orders').doc().set({
-        'foodId': foodId,
-        'foodName': food.name,
-        'notes': '',
-        'createdTime': Timestamp.now(),
-        'done': false,
-        'userId': user.uid,
-        'vendorId': vendorId,
-      });
-      Navigator.pushReplacementNamed(
-        context, CustomerHomePage.routeName,
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(
@@ -77,7 +62,12 @@ class FoodDetailScreen extends StatelessWidget {
           Column(
             children: [
               Image.network(food.image),
-              Text(food.price.toString()),
+              Text(
+                "\$" + food.price.toString(),
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
+              ),
             ],
           ),
           Positioned(
@@ -88,12 +78,12 @@ class FoodDetailScreen extends StatelessWidget {
               //alignment: Alignment.center,
               child: Card(
                 child: InkWell(
-                  onTap: type == 'vendor' ? editItem : orderItem,
+                  onTap: editItem,
                   child: Column(
-                    children: [
+                    children: const [
                       Text(
-                        type == 'vendor' ? 'Edit item' : 'Order',
-                        style: const TextStyle(
+                        'Edit Item',
+                        style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
