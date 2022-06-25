@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Customer_screens/Customer_main.dart';
 import 'Vendor_screens/Vendor_main.dart';
@@ -60,6 +62,15 @@ class _SignupFormState extends State<SignupForm> {
           'username': _username,
           'type': dropdownValue,
         });
+        final prefs = await SharedPreferences.getInstance();
+        String userType = dropdownValue;
+        if (userType == "customer") {
+          await prefs.setString("userType", "customer");
+          Navigator.of(context).pushReplacementNamed('/customer-home');
+        } else if (userType == "vendor") {
+          await prefs.setString("userType", "vendor");
+          Navigator.of(context).pushReplacementNamed('/vendor-home');
+        }
       }
     } catch (error) {
       showDialog(

@@ -59,13 +59,25 @@ class _LoginFormState extends State<LoginForm> {
         }
       }
     } catch (error) {
-      showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-                content: Text(
-                  error.toString(),
-                ),
-              ));
+      if (error.code == 'wrong-password') {
+        showDialog(
+            context: context,
+            builder: (ctx) => const AlertDialog(
+              content: Text(
+                "Wrong password. Please check your password and try again."
+              ),
+            )
+        );
+      } else {
+        showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              content: Text(
+                error.toString(),
+              ),
+            )
+        );
+      }
     }
   }
 
