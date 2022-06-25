@@ -5,9 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Customer_screens/Customer_main.dart';
-import 'Vendor_screens/Vendor_main.dart';
-
 class SignupForm extends StatefulWidget {
   //const SignupForm({ Key? key }) : super(key: key);
   Function toggleLoginSignup;
@@ -24,7 +21,8 @@ class _SignupFormState extends State<SignupForm> {
   String _email = '';
   String _username = '';
   String _password = '';
-  String dropdownValue = null;
+  String dropdownValue;
+  String canteenId;
   bool _obscurePassword;
 
   @override
@@ -54,20 +52,36 @@ class _SignupFormState extends State<SignupForm> {
           email: _email.trim(),
           password: _password.trim(),
         );
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(_authresult.user.uid)
-            .set({
-          'email': _email,
-          'username': _username,
-          'type': dropdownValue,
-        });
+
         final prefs = await SharedPreferences.getInstance();
         String userType = dropdownValue;
         if (userType == "customer") {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(_authresult.user.uid)
+              .set({
+            'email': _email,
+            'username': _username,
+            'type': dropdownValue,
+          });
           await prefs.setString("userType", "customer");
           Navigator.of(context).pushReplacementNamed('/customer-home');
         } else if (userType == "vendor") {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(_authresult.user.uid)
+              .set({
+            'email': _email,
+            'username': _username,
+            'type': dropdownValue,
+            'canteenId': canteenId,
+          });
+          await FirebaseFirestore.instance
+              .collection("canteens")
+              .doc(canteenId)
+              .update({
+            'vendor_id_list': FieldValue.arrayUnion([_authresult.user.uid])
+          });
           await prefs.setString("userType", "vendor");
           Navigator.of(context).pushReplacementNamed('/vendor-home');
         }
@@ -96,7 +110,7 @@ class _SignupFormState extends State<SignupForm> {
         child: Column(
           children: [
             TextFormField(
-              key: ValueKey('email'),
+              key: const ValueKey('email'),
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
                 labelText: 'Email address',
@@ -112,7 +126,7 @@ class _SignupFormState extends State<SignupForm> {
               },
             ),
             TextFormField(
-              key: ValueKey('username'),
+              key: const ValueKey('username'),
               decoration: const InputDecoration(
                 labelText: 'Username',
               ),
@@ -127,20 +141,21 @@ class _SignupFormState extends State<SignupForm> {
               },
             ),
             TextFormField(
-              key: ValueKey('password'),
+              key: const ValueKey('password'),
               obscureText: _obscurePassword,
               decoration: InputDecoration(
-                labelText: 'Password',
-                suffixIcon: IconButton(
-                    onPressed: _toggleObscure,
-                    icon: Padding(
+                  labelText: 'Password',
+                  suffixIcon: IconButton(
+                      onPressed: _toggleObscure,
+                      icon: Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: Icon(
-                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                           color: Colors.grey,
                         ),
-                    ))
-              ),
+                      ))),
               validator: (value) {
                 if (value.isEmpty || value.length < 8) {
                   return 'Please enter a stronger password';
@@ -155,9 +170,9 @@ class _SignupFormState extends State<SignupForm> {
               height: 20,
             ),
             DropdownButtonFormField2(
-              hint: Text('Register as'),
+              hint: const Text('Register as'),
               value: dropdownValue,
-              items: [
+              items: const [
                 DropdownMenuItem(
                   child: Text('Customer'),
                   value: 'customer',
@@ -178,6 +193,43 @@ class _SignupFormState extends State<SignupForm> {
                 });
               },
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            if (dropdownValue == "vendor")
+              FutureBuilder(
+                future: FirebaseFirestore.instance.collection('canteens').get(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const SizedBox(
+                      height: 0,
+                    );
+                  }
+                  List documents = snapshot.requireData.docs;
+                  return DropdownButtonFormField2(
+                    hint: const Text('Canteen'),
+                    value: canteenId,
+                    items: documents
+                        .map(
+                          (canteen) => DropdownMenuItem(
+                            child: Text(canteen["name"]),
+                            value: canteen.id,
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        canteenId = value as String;
+                      });
+                    },
+                    onSaved: (value) {
+                      setState(() {
+                        canteenId = value.toString();
+                      });
+                    },
+                  );
+                },
+              ),
             const SizedBox(
               height: 30,
             ),

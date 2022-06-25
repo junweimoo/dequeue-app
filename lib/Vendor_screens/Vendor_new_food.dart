@@ -40,8 +40,7 @@ class _NewFoodDialogState extends State<NewFoodDialog> {
                 onChanged: (value) {
                   _foodName = value;
                 },
-                decoration: const InputDecoration(
-                    labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'Name'),
                 validator: (value) {
                   if (value.length < 5) {
                     return "Please use a name longer than 4 characters";
@@ -51,14 +50,13 @@ class _NewFoodDialogState extends State<NewFoodDialog> {
               ),
               TextFormField(
                 onChanged: (value) {
-                  _price = double.parse(value.replaceAll(",",""));;
+                  _price = double.parse(value.replaceAll(",", ""));
+                  ;
                 },
                 decoration: InputDecoration(
-                  prefixText: NumberFormat
-                    .compactSimpleCurrency(locale: 'en')
-                    .currencySymbol,
-                  labelText: 'Price'
-                ),
+                    prefixText: NumberFormat.compactSimpleCurrency(locale: 'en')
+                        .currencySymbol,
+                    labelText: 'Price'),
                 inputFormatters: [
                   CurrencyTextInputFormatter(
                     decimalDigits: 2,
