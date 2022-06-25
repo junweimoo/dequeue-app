@@ -38,9 +38,14 @@ class _CanteenListState extends State<CanteenList> {
                       arguments: [data.docs[index].id],
                     );
                   },
-                  child: Text(data.docs[index]['name']),
+                  child: Text(
+                    data.docs[index]['name'],
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
-                margin: EdgeInsets.all(10),
+                margin: EdgeInsets.all(8),
               );
             },
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

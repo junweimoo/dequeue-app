@@ -37,15 +37,22 @@ class _FoodStallListState extends State<FoodStallList> {
             return GridView.builder(
               itemCount: data.docs.length,
               itemBuilder: (ctx, index) {
-                return ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(
-                      CustomerMenuScreen.routeName,
-                      arguments: [data.docs[index].id],
-                    );
-                  },
-                  child:
-                      Text("${snapshot.data.docs[index].data()["username"]}"),
+                return Container(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        CustomerMenuScreen.routeName,
+                        arguments: [data.docs[index].id],
+                      );
+                    },
+                    child: Text(
+                      "${snapshot.data.docs[index].data()["username"]}",
+                      style: const TextStyle(
+                        fontSize: 18
+                      ),
+                    ),
+                  ),
+                  margin: EdgeInsets.all(8),
                 );
               },
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
