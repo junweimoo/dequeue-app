@@ -1,3 +1,4 @@
+import 'package:first_app/Customer_screens/Customer_main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,6 +59,7 @@ class FoodDetailScreen extends StatelessWidget {
         'userId': user.uid,
         'vendorId': vendorId,
       });
+      Navigator.pushReplacementNamed(context, CustomerHomePage.routeName);
     }
 
     return Scaffold(
