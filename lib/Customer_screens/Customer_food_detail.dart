@@ -54,6 +54,7 @@ class _CustomerFoodDetailState extends State<CustomerFoodDetail> {
           Column(
             children: [
               Card(
+                margin: EdgeInsets.all(10),
                 child: Image.network(food.image),
               ),
               Row(
@@ -92,8 +93,13 @@ class _CustomerFoodDetailState extends State<CustomerFoodDetail> {
                 ],
               ),
               Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
-                  border: Border.all(),
+                  border: Border.all(
+                    color: Colors.blue,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
                 margin: EdgeInsets.all(10),
                 child: TextFormField(
