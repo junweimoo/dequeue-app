@@ -31,7 +31,19 @@ class LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  _showLoginForm ? const Text("Login") : const Text('Sign up'),
+                  _showLoginForm
+                      ? const Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      )
+                      : const Text(
+                        'Sign up',
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
                   _showLoginForm
                       ? LoginForm(toggleLoginSignup)
                       : SignupForm(toggleLoginSignup),

@@ -21,6 +21,19 @@ class _LoginFormState extends State<LoginForm> {
   final _formkey = GlobalKey<FormState>();
   String _email;
   String _password;
+  bool _obscureText;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = true;
+  }
+
+  void _toggleObscure() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   void _trysubmit() async {
     try {
@@ -89,13 +102,26 @@ class _LoginFormState extends State<LoginForm> {
               },
             ),
             TextFormField(
-              decoration: const InputDecoration(
+              obscureText: _obscureText,
+              decoration: InputDecoration(
                 labelText: 'Password',
+                suffixIcon: IconButton(
+                    onPressed: _toggleObscure,
+                    icon: Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Icon(
+                        _obscureText ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                    ))
               ),
               onSaved: (value) {
                 _password = value;
               },
               validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter your password';
+                }
                 return null;
               },
             ),

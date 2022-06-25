@@ -23,6 +23,19 @@ class _SignupFormState extends State<SignupForm> {
   String _username = '';
   String _password = '';
   String dropdownValue = null;
+  bool _obscurePassword;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscurePassword = true;
+  }
+
+  void _toggleObscure() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
 
   void _trysubmit() async {
     try {
@@ -104,9 +117,18 @@ class _SignupFormState extends State<SignupForm> {
             ),
             TextFormField(
               key: ValueKey('password'),
-              obscureText: true,
-              decoration: const InputDecoration(
+              obscureText: _obscurePassword,
+              decoration: InputDecoration(
                 labelText: 'Password',
+                suffixIcon: IconButton(
+                    onPressed: _toggleObscure,
+                    icon: Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: Icon(
+                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                    ))
               ),
               validator: (value) {
                 if (value.isEmpty || value.length < 8) {

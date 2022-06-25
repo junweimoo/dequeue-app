@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
 
   Widget getHomePage() {
     var currentUser = FirebaseAuth.instance.currentUser;
-
     if (currentUser != null) {
       return userType == "customer" ? CustomerHomePage() : VendorHomePage();
     } else {
