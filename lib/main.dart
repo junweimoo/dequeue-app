@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_app/Customer_screens/Customer_order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
               LoginPage.routeName: (ctx) => LoginPage(),
               FoodStallList.routeName: (ctx) => FoodStallList(),
               CustomerMenuScreen.routeName: (ctx) => CustomerMenuScreen(),
+              CustomerOrderScreen.routeName: (ctx) => CustomerOrderScreen(),
             },
           );
         }

@@ -1,4 +1,5 @@
 import 'package:first_app/Customer_screens/Customer_main.dart';
+import 'package:first_app/Customer_screens/Customer_order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,7 +60,10 @@ class FoodDetailScreen extends StatelessWidget {
         'userId': user.uid,
         'vendorId': vendorId,
       });
-      Navigator.pushReplacementNamed(context, CustomerHomePage.routeName);
+      Navigator.pushNamed(
+        context, CustomerHomePage.routeName,
+        arguments: [1]
+      );
     }
 
     return Scaffold(
@@ -90,7 +94,7 @@ class FoodDetailScreen extends StatelessWidget {
                     children: [
                       Text(
                         type == 'vendor' ? 'Edit item' : 'Order',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,

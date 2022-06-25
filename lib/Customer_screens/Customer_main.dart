@@ -29,6 +29,8 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final List args = ModalRoute.of(context).settings.arguments as List;
+    if (args != null) _currIndex = args[0];
     List<Widget> screens = <Widget>[
       CanteenList(),
       CustomerOrderScreen(),
