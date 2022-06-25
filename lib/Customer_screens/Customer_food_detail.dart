@@ -34,6 +34,7 @@ class CustomerFoodDetail extends StatelessWidget {
       );
     }
 
+
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(
@@ -45,11 +46,53 @@ class CustomerFoodDetail extends StatelessWidget {
         children: [
           Column(
             children: [
-              Image.network(food.image),
-              Text(
-                "\$" + food.price.toString(),
-                style: const TextStyle(
-                  fontSize: 20,
+              Card(
+                child: Image.network(food.image),
+              ),
+              Row(
+                children: [
+                  Container(
+                    height: 50,
+                    width: 150,
+                    child: Card(
+                      child: Center(
+                        child: Text(
+                          "\$" + food.price.toString(),
+                          style: const TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      color: Colors.lightGreen,
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    width: 150,
+                    child: const Card(
+                      child: Center(
+                        child: Text(
+                          "The Deck",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      color: Colors.lightGreen,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.all(15),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: "Type your notes to vendor here",
+                  ),
+                  maxLines: 3,
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
                 ),
               ),
             ],
