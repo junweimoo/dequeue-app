@@ -157,7 +157,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     onTap: () {
                       FirebaseAuth.instance.signOut();
                       Navigator.of(context)
-                          .pushReplacementNamed(LoginPage.routeName);
+                          .pushNamedAndRemoveUntil(LoginPage.routeName, (r) => false);
                     },
                   ),
                 ),
