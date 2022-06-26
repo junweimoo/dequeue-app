@@ -46,8 +46,8 @@ class _OrderQueueState extends State<OrderQueue> {
                         children: [
                           ClipRRect(
                             borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
                             ),
                             child: Container(
                               child: Text(
@@ -63,45 +63,64 @@ class _OrderQueueState extends State<OrderQueue> {
                           ),
                         ],
                       ),
-                      Text(
-                        'Notes: \n${order["notes"]}',
-                        style: const TextStyle(
-                          fontSize: 20,
+                      Container(
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Notes: ',
+                              style: TextStyle(
+                                fontSize: 25,
+                              ),
+                            ),
+                            if (order["notes"] != null)
+                              Text(
+                                '${order["notes"]}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.start,
                         ),
+                        height: 80,
+                        margin: EdgeInsets.all(5),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          order.reference.update(
-                            {
-                              "done": true,
-                            },
-                          );
-                        },
-                        child: Text(
-                          "Done",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 22,
-                          ),
-                        ),
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            order.reference.update(
+                              {
+                                "done": true,
+                              },
+                            );
+                          },
+                          child: const Text(
+                            "Done",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 22,
                             ),
                           ),
-                          backgroundColor: MaterialStateProperty.all(
-                            Colors.orange.withOpacity(0.9),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              Colors.orange.withOpacity(0.9),
+                            ),
                           ),
                         ),
                       )
                     ],
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 height: 200,
