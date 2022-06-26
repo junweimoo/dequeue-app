@@ -41,7 +41,6 @@ class _CustomerFoodDetailState extends State<CustomerFoodDetail> {
       );
     }
 
-
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(

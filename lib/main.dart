@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/Customer_screens/Customer_food_detail.dart';
 import 'package:first_app/Customer_screens/Customer_order_screen.dart';
@@ -16,26 +17,20 @@ import 'Customer_screens/Customer_menu_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String userType = await prefs.getString("userType");
   /* runApp(MultiProvider(
     providers: [],
     child: MyApp(),
   )); */
-  runApp(MyApp(userType));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final String userType;
-
-  const MyApp(this.userType);
-
   static Future<FirebaseApp> initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
     return firebaseApp;
   }
 
-  Widget getHomePage() {
+  Widget getHomePage(String userType) {
     var currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       return userType == "customer" ? CustomerHomePage(0) : VendorHomePage();
@@ -44,10 +39,15 @@ class MyApp extends StatelessWidget {
     }
   }
 
+  Future<String> getUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString("userType");
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: initializeFirebase(),
+      future: Future.wait([initializeFirebase(), getUserType()]),
       builder: (context, appSnapshot) {
         if (appSnapshot.hasError) {
           return Text('Something went wrong');
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         if (appSnapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
             title: 'Test',
-            home: getHomePage(),
+            home: getHomePage(appSnapshot.data[1]),
             routes: {
               VendorHomePage.routeName: (ctx) => VendorHomePage(),
               CustomerHomePage.routeName: (ctx) => CustomerHomePage(0),
