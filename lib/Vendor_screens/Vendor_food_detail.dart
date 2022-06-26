@@ -37,123 +37,136 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
               .doc(foodId)
               .snapshots(),
           builder: (context, snapshot) {
-            final food = snapshot.data.data();
-            return Column(
-              children: [
-                Stack(
-                  children: [
-                    ClipRRect(
-                      child: Image.network(food["imageUrl"]),
-                      borderRadius:
-                          BorderRadius.vertical(bottom: Radius.circular(35)),
-                    ),
-                    Positioned(
-                      child: GestureDetector(
-                        child: Icon(Icons.arrow_back_ios, size: 30),
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
+            if (snapshot.connectionState == ConnectionState.done) {
+              final food = snapshot.data.data();
+              return Column(
+                children: [
+                  Stack(
+                    children: [
+                      ClipRRect(
+                        child: Image.network(food["imageUrl"]),
+                        borderRadius:
+                            BorderRadius.vertical(bottom: Radius.circular(35)),
                       ),
-                      bottom: 15,
-                      left: 15,
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: Container(
-                    child: Column(
-                      children: [
-                        _onEdit
-                            ? TextField(
-                                controller: TextEditingController(
-                                  text: _newName,
+                      Positioned(
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey.withOpacity(0.7),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                        bottom: 15,
+                        left: 15,
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: Column(
+                        children: [
+                          _onEdit
+                              ? TextField(
+                                  controller: TextEditingController(
+                                    text: _newName,
+                                  ),
+                                  onChanged: (value) {
+                                    _newName = value;
+                                  },
+                                )
+                              : FittedBox(
+                                  child: Text(
+                                    food["name"],
+                                    style: const TextStyle(
+                                      fontSize: 30,
+                                    ),
+                                  ),
+                                  fit: BoxFit.contain,
                                 ),
-                                onChanged: (value) {
-                                  _newName = value;
-                                },
-                              )
-                            : FittedBox(
-                                child: Text(
-                                  food["name"],
+                          SizedBox(
+                            height: 5,
+                          ),
+                          _onEdit
+                              ? TextField(
+                                  controller: TextEditingController(
+                                    text: _newPrice.toString(),
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (value) {
+                                    _newPrice = double.parse(value);
+                                  },
+                                )
+                              : Text(
+                                  "\$ ${food["price"].toString()}",
                                   style: const TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 20,
                                   ),
                                 ),
-                                fit: BoxFit.contain,
-                              ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        _onEdit
-                            ? TextField(
-                                controller: TextEditingController(
-                                  text: _newPrice.toString(),
-                                ),
-                                keyboardType: TextInputType.number,
-                                onChanged: (value) {
-                                  _newPrice = double.parse(value);
-                                },
-                              )
-                            : Text(
-                                "\$ ${food["price"].toString()}",
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
-                      ],
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                        ],
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                      margin: EdgeInsets.all(20),
                     ),
-                    margin: EdgeInsets.all(20),
                   ),
-                ),
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (_onEdit) {
-                          await FirebaseFirestore.instance
-                              .collection("Food_items")
-                              .doc(foodId)
-                              .update({
-                            "name": _newName,
-                            "price": _newPrice,
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_onEdit) {
+                            await FirebaseFirestore.instance
+                                .collection("Food_items")
+                                .doc(foodId)
+                                .update({
+                              "name": _newName,
+                              "price": _newPrice,
+                            });
+                          }
+                          setState(() {
+                            _newName = food["name"];
+                            _newPrice = food["price"];
+                            _onEdit = !_onEdit;
                           });
-                        }
-                        setState(() {
-                          _newName = food["name"];
-                          _newPrice = food["price"];
-                          _onEdit = !_onEdit;
-                        });
-                      },
-                      child: _onEdit
-                          ? const Text("Save")
-                          : const Text('Edit item'),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          Colors.orange.withOpacity(0.8),
+                        },
+                        child: _onEdit
+                            ? const Text("Save")
+                            : const Text('Edit item'),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            Colors.orange.withOpacity(0.8),
+                          ),
                         ),
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        /* await FirebaseFirestore.instance
+                      ElevatedButton(
+                        onPressed: () async {
+                          /* await FirebaseFirestore.instance
                         .collection("Food_items")
                         .doc(foodId)
                         .delete(); */
-                        Navigator.popUntil(context, (route) => route.isFirst);
-                      },
-                      child: const Text('Delete item'),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          Colors.red.withOpacity(0.8),
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                        },
+                        child: const Text('Delete item'),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            Colors.red.withOpacity(0.8),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                ),
-              ],
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ),
+                ],
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
             );
           }),
     );
