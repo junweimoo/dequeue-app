@@ -23,8 +23,7 @@ class _CustomerFoodDetailState extends State<CustomerFoodDetail> {
     final List args = ModalRoute.of(context).settings.arguments as List;
     final Food food = args[0];
     final String foodId = args[1];
-    final String type = args[2];
-    final String vendorId = args[3];
+    final String vendorId = args[2];
 
     void orderItem() {
       FirebaseFirestore.instance.collection('orders').doc().set({
@@ -37,8 +36,7 @@ class _CustomerFoodDetailState extends State<CustomerFoodDetail> {
         'vendorId': vendorId,
       });
       Navigator.pushNamedAndRemoveUntil(
-          context, CustomerHomePage.routeName1, (r) => false
-      );
+          context, CustomerHomePage.routeName1, (r) => false);
     }
 
     return Scaffold(

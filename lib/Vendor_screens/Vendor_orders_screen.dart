@@ -76,14 +76,14 @@ class _OrderQueueState extends State<OrderQueue> {
                               Text(
                                 '${order["notes"]}',
                                 style: const TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 25,
                                 ),
                               ),
                           ],
                           crossAxisAlignment: CrossAxisAlignment.start,
                         ),
                         height: 80,
-                        margin: EdgeInsets.all(5),
+                        margin: const EdgeInsets.all(5),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),

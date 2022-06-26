@@ -1,5 +1,6 @@
 import 'package:first_app/Customer_screens/Customer_main.dart';
 import 'package:first_app/Customer_screens/Customer_order_screen.dart';
+import 'package:first_app/Vendor_screens/Vendor_main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,8 +17,6 @@ class VendorFoodDetail extends StatelessWidget {
     final List args = ModalRoute.of(context).settings.arguments as List;
     final Food food = args[0];
     final String foodId = args[1];
-    final String type = args[2];
-    final String vendorId = args[3];
 
     void editItem() {
       showDialog(
@@ -38,11 +37,26 @@ class VendorFoodDetail extends StatelessWidget {
                   TextButton(
                     onPressed: () {},
                     child: const Text('Edit photo'),
-                  )
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await FirebaseFirestore.instance
+                          .collection("Food_items")
+                          .doc(foodId)
+                          .delete();
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                    },
+                    child: const Text('Delete item'),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Colors.red.withOpacity(0.8)),
+                    ),
+                  ),
                 ],
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
               ),
-              height: MediaQuery.of(ctx).size.height / 2,
+              height: MediaQuery.of(ctx).size.height / 3,
               alignment: Alignment.center,
             ),
           );

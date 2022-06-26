@@ -29,8 +29,6 @@ class MenuButton extends StatelessWidget {
               arguments: [
                 food,
                 foodId,
-                'vendor',
-                "",
               ],
             );
           },

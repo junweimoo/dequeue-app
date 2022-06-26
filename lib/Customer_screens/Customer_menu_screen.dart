@@ -103,7 +103,6 @@ class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
                                   price: documents[index]['price'].toDouble(),
                                 ),
                                 documents[index].id,
-                                'customer',
                                 vendorId,
                               ],
                             );
