@@ -3,121 +3,159 @@ import 'package:first_app/Customer_screens/Customer_order_screen.dart';
 import 'package:first_app/Vendor_screens/Vendor_main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../Food.dart';
 
-class VendorFoodDetail extends StatelessWidget {
+class VendorFoodDetail extends StatefulWidget {
   //const FoodDetailScreen({ Key? key }) : super(key: key);
   static const routeName = '/vendor-food-detail';
 
   @override
+  State<VendorFoodDetail> createState() => _VendorFoodDetailState();
+}
+
+class _VendorFoodDetailState extends State<VendorFoodDetail> {
+  bool _onEdit;
+  String _newName;
+  double _newPrice;
+
+  @override
+  void initState() {
+    super.initState();
+    _onEdit = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final User user = FirebaseAuth.instance.currentUser;
     final List args = ModalRoute.of(context).settings.arguments as List;
-    final Food food = args[0];
     final String foodId = args[1];
 
-    void editItem() {
-      showDialog(
-        context: context,
-        builder: (ctx) {
-          return Dialog(
-            child: Container(
-              child: Column(
-                children: [
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Edit name'),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Edit price'),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Edit photo'),
-                  ),
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await FirebaseFirestore.instance
-                          .collection("Food_items")
-                          .doc(foodId)
-                          .delete();
-                      Navigator.popUntil(context, (route) => route.isFirst);
-                    },
-                    child: const Text('Delete item'),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          Colors.red.withOpacity(0.8)),
-                    ),
-                  ),
-                ],
-                mainAxisAlignment: MainAxisAlignment.start,
-              ),
-              height: MediaQuery.of(ctx).size.height / 3,
-              alignment: Alignment.center,
-            ),
-          );
-        },
-      );
-    }
-
     return Scaffold(
-      appBar: AppBar(
-        title: FittedBox(
-          child: Text(food.name),
-          fit: BoxFit.contain,
-        ),
-      ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Image.network(food.image),
-              Text(
-                "\$" + food.price.toString(),
-                style: const TextStyle(
-                  fontSize: 20,
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("Food_items")
+              .doc(foodId)
+              .snapshots(),
+          builder: (context, snapshot) {
+            final food = snapshot.data.data();
+            return Column(
+              children: [
+                Stack(
+                  children: [
+                    ClipRRect(
+                      child: Image.network(food["imageUrl"]),
+                      borderRadius:
+                          BorderRadius.vertical(bottom: Radius.circular(35)),
+                    ),
+                    Positioned(
+                      child: GestureDetector(
+                        child: Icon(Icons.arrow_back_ios, size: 30),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      bottom: 15,
+                      left: 15,
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 10,
-            child: Container(
-              height: 50,
-              width: 150,
-              //alignment: Alignment.center,
-              child: Card(
-                child: InkWell(
-                  onTap: editItem,
-                  child: Column(
-                    children: const [
-                      Text(
-                        'Edit Item',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
+                Expanded(
+                  child: Container(
+                    child: Column(
+                      children: [
+                        _onEdit
+                            ? TextField(
+                                controller: TextEditingController(
+                                  text: _newName,
+                                ),
+                                onChanged: (value) {
+                                  _newName = value;
+                                },
+                              )
+                            : FittedBox(
+                                child: Text(
+                                  food["name"],
+                                  style: const TextStyle(
+                                    fontSize: 30,
+                                  ),
+                                ),
+                                fit: BoxFit.contain,
+                              ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        _onEdit
+                            ? TextField(
+                                controller: TextEditingController(
+                                  text: _newPrice.toString(),
+                                ),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  _newPrice = double.parse(value);
+                                },
+                              )
+                            : Text(
+                                "\$ ${food["price"].toString()}",
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                      ],
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    margin: EdgeInsets.all(20),
+                  ),
+                ),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_onEdit) {
+                          await FirebaseFirestore.instance
+                              .collection("Food_items")
+                              .doc(foodId)
+                              .update({
+                            "name": _newName,
+                            "price": _newPrice,
+                          });
+                        }
+                        setState(() {
+                          _newName = food["name"];
+                          _newPrice = food["price"];
+                          _onEdit = !_onEdit;
+                        });
+                      },
+                      child: _onEdit
+                          ? const Text("Save")
+                          : const Text('Edit item'),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          Colors.orange.withOpacity(0.8),
                         ),
                       ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                  ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        /* await FirebaseFirestore.instance
+                        .collection("Food_items")
+                        .doc(foodId)
+                        .delete(); */
+                        Navigator.popUntil(context, (route) => route.isFirst);
+                      },
+                      child: const Text('Delete item'),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          Colors.red.withOpacity(0.8),
+                        ),
+                      ),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                color: Colors.orange,
-              ),
-            ),
-          ),
-        ],
-        alignment: Alignment.center,
-      ),
+              ],
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+            );
+          }),
     );
   }
 }
