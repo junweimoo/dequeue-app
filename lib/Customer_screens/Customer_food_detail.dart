@@ -36,8 +36,8 @@ class _CustomerFoodDetailState extends State<CustomerFoodDetail> {
         'userId': user.uid,
         'vendorId': vendorId,
       });
-      Navigator.pushReplacementNamed(
-        context, CustomerHomePage.routeName,
+      Navigator.pushNamedAndRemoveUntil(
+          context, CustomerHomePage.routeName1, (r) => false
       );
     }
 

@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget getHomePage() {
     var currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      return userType == "customer" ? CustomerHomePage() : VendorHomePage();
+      return userType == "customer" ? CustomerHomePage(0) : VendorHomePage();
     } else {
       return LoginPage();
     }
@@ -58,11 +58,11 @@ class MyApp extends StatelessWidget {
             home: getHomePage(),
             routes: {
               VendorHomePage.routeName: (ctx) => VendorHomePage(),
-              CustomerHomePage.routeName: (ctx) => CustomerHomePage(),
+              CustomerHomePage.routeName: (ctx) => CustomerHomePage(0),
+              CustomerHomePage.routeName1: (ctx) => CustomerHomePage(1),
               LoginPage.routeName: (ctx) => LoginPage(),
               FoodStallList.routeName: (ctx) => FoodStallList(),
               CustomerMenuScreen.routeName: (ctx) => CustomerMenuScreen(),
-              CustomerOrderScreen.routeName: (ctx) => CustomerOrderScreen(),
               CustomerFoodDetail.routeName: (ctx) => CustomerFoodDetail(),
               VendorFoodDetail.routeName: (ctx) => VendorFoodDetail(),
             },

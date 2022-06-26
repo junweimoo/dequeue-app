@@ -24,6 +24,7 @@ class _NewFoodDialogState extends State<NewFoodDialog> {
       'vendorId': FirebaseAuth.instance.currentUser.uid,
       'imageUrl': ""
     });
+    Navigator.pop(context);
   }
 
   @override

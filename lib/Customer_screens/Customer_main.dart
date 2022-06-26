@@ -8,12 +8,22 @@ import './Customer_canteens_screen.dart';
 
 class CustomerHomePage extends StatefulWidget {
   static const routeName = '/customer-home';
+  static const routeName1 = '/customer-home-orders';
+  final int _startIndex;
+
+  CustomerHomePage(this._startIndex);
+
   @override
   State<CustomerHomePage> createState() => _CustomerHomePageState();
 }
 
 class _CustomerHomePageState extends State<CustomerHomePage> {
-  int _currIndex = 0;
+  int _currIndex;
+
+  @override
+  void initState() {
+    _currIndex = widget._startIndex;
+  }
 
   static const _TITLE = [
     'Canteens',
