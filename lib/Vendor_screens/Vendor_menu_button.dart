@@ -26,10 +26,7 @@ class MenuButton extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed(
               VendorFoodDetail.routeName,
-              arguments: [
-                food,
-                foodId,
-              ],
+              arguments: foodId,
             );
           },
           child: Column(

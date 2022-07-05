@@ -3,6 +3,7 @@ import 'package:first_app/Customer_screens/Customer_order_screen.dart';
 import 'package:first_app/Vendor_screens/Vendor_main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../Food.dart';
 
@@ -15,20 +16,21 @@ class VendorFoodDetail extends StatefulWidget {
 }
 
 class _VendorFoodDetailState extends State<VendorFoodDetail> {
+  final User user = FirebaseAuth.instance.currentUser;
   bool _onEdit;
   String _newName;
   double _newPrice;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     _onEdit = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final List args = ModalRoute.of(context).settings.arguments as List;
-    final String foodId = args[1];
+    final String foodId = ModalRoute.of(context).settings.arguments as String;
 
     return Scaffold(
       body: StreamBuilder(
@@ -37,8 +39,9 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
               .doc(foodId)
               .snapshots(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.connectionState == ConnectionState.active) {
               final food = snapshot.data.data();
+
               return Column(
                 children: [
                   Stack(
@@ -118,9 +121,9 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                   Row(
                     children: [
                       ElevatedButton(
-                        onPressed: () async {
+                        onPressed: () {
                           if (_onEdit) {
-                            await FirebaseFirestore.instance
+                            FirebaseFirestore.instance
                                 .collection("Food_items")
                                 .doc(foodId)
                                 .update({
@@ -129,8 +132,6 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                             });
                           }
                           setState(() {
-                            _newName = food["name"];
-                            _newPrice = food["price"];
                             _onEdit = !_onEdit;
                           });
                         },
@@ -144,7 +145,7 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () async {
+                        onPressed: () {
                           /* await FirebaseFirestore.instance
                         .collection("Food_items")
                         .doc(foodId)
