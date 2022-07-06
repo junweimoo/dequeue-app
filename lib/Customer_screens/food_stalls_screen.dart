@@ -11,11 +11,11 @@ class FoodStallList extends StatefulWidget {
 }
 
 class _FoodStallListState extends State<FoodStallList> {
-
   @override
   Widget build(BuildContext context) {
     final List args = ModalRoute.of(context).settings.arguments as List;
     final String canteenId = args[0];
+    final String canteenName = args[1];
 
     return Scaffold(
       appBar: AppBar(
@@ -43,14 +43,12 @@ class _FoodStallListState extends State<FoodStallList> {
                     onPressed: () {
                       Navigator.of(context).pushNamed(
                         CustomerMenuScreen.routeName,
-                        arguments: [data.docs[index].id],
+                        arguments: [data.docs[index].id, canteenName],
                       );
                     },
                     child: Text(
                       "${snapshot.data.docs[index].data()["username"]}",
-                      style: const TextStyle(
-                        fontSize: 18
-                      ),
+                      style: const TextStyle(fontSize: 18),
                     ),
                   ),
                   margin: EdgeInsets.all(8),

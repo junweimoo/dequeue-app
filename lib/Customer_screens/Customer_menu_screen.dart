@@ -20,10 +20,12 @@ class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
   Widget build(BuildContext context) {
     final List args = ModalRoute.of(context).settings.arguments as List;
     final String vendorId = args[0];
+    final String canteenName = args[1];
     final Stream<QuerySnapshot> foodList = FirebaseFirestore.instance
         .collection('Food_items')
         .where("vendorId", isEqualTo: vendorId)
         .snapshots();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Menu"),
@@ -104,6 +106,7 @@ class _CustomerMenuScreenState extends State<CustomerMenuScreen> {
                                 ),
                                 documents[index].id,
                                 vendorId,
+                                canteenName,
                               ],
                             );
                           },

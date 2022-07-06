@@ -24,19 +24,21 @@ class _CustomerFoodDetailState extends State<CustomerFoodDetail> {
     final Food food = args[0];
     final String foodId = args[1];
     final String vendorId = args[2];
+    final String canteenName = args[3];
 
     void orderItem() {
       FirebaseFirestore.instance.collection('orders').doc().set({
-        'foodId': foodId,
         'foodName': food.name,
         'notes': notes,
         'createdTime': Timestamp.now(),
         'done': false,
         'userId': user.uid,
         'vendorId': vendorId,
+        'canteenName': canteenName,
+        'price': food.price,
+        'image': food.image,
       });
-      Navigator.pushNamedAndRemoveUntil(
-          context, CustomerHomePage.routeName1, (r) => false);
+      Navigator.popUntil(context, (route) => route.isFirst);
     }
 
     return Scaffold(
@@ -46,107 +48,99 @@ class _CustomerFoodDetailState extends State<CustomerFoodDetail> {
           fit: BoxFit.contain,
         ),
       ),
-      body: Stack(
+      body: Column(
         children: [
-          Column(
+          Card(
+            margin: const EdgeInsets.all(10),
+            child: Image.network(food.image),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Card(
-                margin: EdgeInsets.all(10),
-                child: Image.network(food.image),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 50,
-                    width: 150,
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          "\$" + food.price.toString(),
-                          style: const TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
+              Container(
+                height: 50,
+                width: 150,
+                child: Card(
+                  child: Center(
+                    child: Text(
+                      "\$" + food.price.toString(),
+                      style: const TextStyle(
+                        fontSize: 20,
                       ),
-                      color: Colors.lightGreen,
                     ),
                   ),
-                  Container(
-                    height: 50,
-                    width: 150,
-                    child: const Card(
-                      child: Center(
-                        child: Text(
-                          "The Deck",
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      color: Colors.lightGreen,
-                    ),
-                  ),
-                ],
+                  color: Colors.lightGreen,
+                ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.blue,
-                    width: 1,
+                height: 50,
+                width: 150,
+                child: Card(
+                  child: Center(
+                    child: Text(
+                      canteenName,
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                margin: EdgeInsets.all(10),
-                child: TextFormField(
-                  onChanged: (value) {
-                    notes = value;
-                  },
-                  decoration: InputDecoration(
-                    hintText: "Type your notes to the vendor here",
-                  ),
-                  maxLines: 3,
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
+                  color: Colors.lightGreen,
                 ),
               ),
             ],
           ),
-          Positioned(
-            bottom: 10,
-            child: Container(
-              height: 50,
-              width: 150,
-              //alignment: Alignment.center,
-              child: Card(
-                child: InkWell(
-                  onTap: orderItem,
-                  child: Column(
-                    children: const [
-                      Text(
-                        'Order',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                color: Colors.orange,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.blue,
+                width: 1,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+            ),
+            margin: const EdgeInsets.all(10),
+            child: TextFormField(
+              onChanged: (value) {
+                notes = value;
+              },
+              decoration: const InputDecoration(
+                hintText: "Type your notes to the vendor here",
+              ),
+              maxLines: 3,
+              style: const TextStyle(
+                fontSize: 18,
               ),
             ),
           ),
+          Expanded(child: SizedBox()),
+          Container(
+            height: 50,
+            width: 150,
+            child: Card(
+              child: InkWell(
+                onTap: orderItem,
+                child: Column(
+                  children: const [
+                    Text(
+                      'Order',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              color: Colors.orange,
+            ),
+          ),
         ],
-        alignment: Alignment.center,
       ),
     );
   }

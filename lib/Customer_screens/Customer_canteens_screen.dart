@@ -35,7 +35,10 @@ class _CanteenListState extends State<CanteenList> {
                   onPressed: () {
                     Navigator.of(context).pushNamed(
                       FoodStallList.routeName,
-                      arguments: [data.docs[index].id],
+                      arguments: [
+                        data.docs[index].id,
+                        data.docs[index]['name']
+                      ],
                     );
                   },
                   child: Text(
