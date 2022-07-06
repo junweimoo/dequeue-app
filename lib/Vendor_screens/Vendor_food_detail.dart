@@ -46,13 +46,29 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
         child: Text("Confirm"),
         onPressed: () {
           if (_onEdit) {
-            /* FirebaseFirestore.instance
+            if (_newName != null && _newPrice != null) {
+              /* FirebaseFirestore.instance
                                   .collection("Food_items")
                                   .doc(foodId)
                                   .update({
                                 "name": _newName,
                                 "price": _newPrice,
                               }); */
+            } else if (_newName != null) {
+              /* FirebaseFirestore.instance
+                                  .collection("Food_items")
+                                  .doc(foodId)
+                                  .update({
+                                "name": _newName,
+                              }); */
+            } else if (_newPrice != null) {
+              /* FirebaseFirestore.instance
+                                  .collection("Food_items")
+                                  .doc(foodId)
+                                  .update({
+                                "price": _newPrice,
+                              }); */
+            }
             print(_newName);
             print(_newPrice);
             Navigator.of(context).pop();
@@ -132,10 +148,11 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                           _onEdit
                               ? TextField(
                                   controller: TextEditingController(
-                                    text: _newName,
+                                    text: food["name"],
                                   ),
                                   onChanged: (value) {
                                     _newName = value;
+                                    print(_newName);
                                   },
                                 )
                               : FittedBox(
@@ -153,15 +170,16 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                           _onEdit
                               ? TextField(
                                   controller: TextEditingController(
-                                    text: _newPrice.toString(),
+                                    text: food["price"].toStringAsFixed(2),
                                   ),
                                   keyboardType: TextInputType.number,
                                   onChanged: (value) {
                                     _newPrice = double.parse(value);
+                                    print(_newPrice);
                                   },
                                 )
                               : Text(
-                                  "\$ ${food["price"].toString()}",
+                                  "\$ ${food["price"].toStringAsFixed(2)}",
                                   style: const TextStyle(
                                     fontSize: 20,
                                   ),
@@ -177,7 +195,7 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                       ElevatedButton(
                         onPressed: () {
                           if (_onEdit) {
-                            if (_newName != null && _newPrice != null) {
+                            if (_newName != null || _newPrice != null) {
                               showAlertDialog(context);
                             }
                           }
