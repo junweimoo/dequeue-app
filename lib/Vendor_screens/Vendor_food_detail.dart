@@ -23,7 +23,6 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _onEdit = false;
   }
@@ -31,6 +30,62 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
   @override
   Widget build(BuildContext context) {
     final String foodId = ModalRoute.of(context).settings.arguments as String;
+
+    showAlertDialog(BuildContext context) {
+      // set up the buttons
+      Widget cancelButton = TextButton(
+        child: Text(
+          "Cancel",
+          style: TextStyle(color: Colors.red),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      );
+      Widget continueButton = TextButton(
+        child: Text("Confirm"),
+        onPressed: () {
+          if (_onEdit) {
+            /* FirebaseFirestore.instance
+                                  .collection("Food_items")
+                                  .doc(foodId)
+                                  .update({
+                                "name": _newName,
+                                "price": _newPrice,
+                              }); */
+            print(_newName);
+            print(_newPrice);
+            Navigator.of(context).pop();
+          } else {
+            /* await FirebaseFirestore.instance
+                        .collection("Food_items")
+                        .doc(foodId)
+                        .delete(); */
+            Navigator.popUntil(context, (route) => route.isFirst);
+          }
+        },
+      );
+
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: Text("AlertDialog"),
+        content: _onEdit
+            ? Text("Press confirm to edit the item")
+            : Text("Press confirm to delete the item"),
+        actions: [
+          cancelButton,
+          continueButton,
+        ],
+      );
+
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
 
     return Scaffold(
       body: StreamBuilder(
@@ -41,22 +96,21 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               final food = snapshot.data.data();
-
               return Column(
                 children: [
                   Stack(
                     children: [
                       ClipRRect(
                         child: Image.network(food["imageUrl"]),
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(35)),
+                        borderRadius: const BorderRadius.vertical(
+                            bottom: Radius.circular(35)),
                       ),
                       Positioned(
                         child: CircleAvatar(
                           radius: 20,
                           backgroundColor: Colors.grey.withOpacity(0.7),
                           child: IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.arrow_back_ios,
                               size: 30,
                               color: Colors.white,
@@ -93,7 +147,7 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                                   ),
                                   fit: BoxFit.contain,
                                 ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           _onEdit
@@ -115,7 +169,7 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                         ],
                         crossAxisAlignment: CrossAxisAlignment.start,
                       ),
-                      margin: EdgeInsets.all(20),
+                      margin: const EdgeInsets.all(20),
                     ),
                   ),
                   Row(
@@ -123,13 +177,9 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                       ElevatedButton(
                         onPressed: () {
                           if (_onEdit) {
-                            FirebaseFirestore.instance
-                                .collection("Food_items")
-                                .doc(foodId)
-                                .update({
-                              "name": _newName,
-                              "price": _newPrice,
-                            });
+                            if (_newName != null && _newPrice != null) {
+                              showAlertDialog(context);
+                            }
                           }
                           setState(() {
                             _onEdit = !_onEdit;
@@ -146,13 +196,17 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          /* await FirebaseFirestore.instance
-                        .collection("Food_items")
-                        .doc(foodId)
-                        .delete(); */
-                          Navigator.popUntil(context, (route) => route.isFirst);
+                          if (_onEdit) {
+                            setState(() {
+                              _onEdit = !_onEdit;
+                            });
+                          } else {
+                            showAlertDialog(context);
+                          }
                         },
-                        child: const Text('Delete item'),
+                        child: _onEdit
+                            ? const Text('Discard changes')
+                            : const Text('Delete item'),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
                             Colors.red.withOpacity(0.8),
@@ -166,7 +220,7 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
               );
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }),
