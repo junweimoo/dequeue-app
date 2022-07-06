@@ -93,7 +93,7 @@ class _CustomerOrderScreenState extends State<CustomerOrderScreen> {
                     itemCount: documents.length,
                     itemBuilder: (ctx, index) {
                       final order = documents[index];
-                      return Customer_order_widget(order);
+                      return Customer_order_widget(order.data());
                     },
                     shrinkWrap: true,
                   ),
