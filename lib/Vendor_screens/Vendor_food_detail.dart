@@ -1,11 +1,6 @@
-import 'package:first_app/Customer_screens/Customer_main.dart';
-import 'package:first_app/Customer_screens/Customer_order_screen.dart';
-import 'package:first_app/Vendor_screens/Vendor_main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../Food.dart';
 
 class VendorFoodDetail extends StatefulWidget {
   //const FoodDetailScreen({ Key? key }) : super(key: key);
@@ -34,7 +29,7 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
     showAlertDialog(BuildContext context) {
       // set up the buttons
       Widget cancelButton = TextButton(
-        child: Text(
+        child: const Text(
           "Cancel",
           style: TextStyle(color: Colors.red),
         ),
@@ -43,35 +38,33 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
         },
       );
       Widget continueButton = TextButton(
-        child: Text("Confirm"),
+        child: const Text("Confirm"),
         onPressed: () {
           if (_onEdit) {
             if (_newName != null && _newPrice != null) {
-              /* FirebaseFirestore.instance
-                                  .collection("Food_items")
-                                  .doc(foodId)
-                                  .update({
-                                "name": _newName,
-                                "price": _newPrice,
-                              }); */
+              FirebaseFirestore.instance
+                  .collection("Food_items")
+                  .doc(foodId)
+                  .update({
+                "name": _newName,
+                "price": _newPrice,
+              });
             } else if (_newName != null) {
-              /* FirebaseFirestore.instance
-                                  .collection("Food_items")
-                                  .doc(foodId)
-                                  .update({
-                                "name": _newName,
-                              }); */
+              FirebaseFirestore.instance
+                  .collection("Food_items")
+                  .doc(foodId)
+                  .update({
+                "name": _newName,
+              });
             } else if (_newPrice != null) {
-              /* FirebaseFirestore.instance
-                                  .collection("Food_items")
-                                  .doc(foodId)
-                                  .update({
-                                "price": _newPrice,
-                              }); */
+              FirebaseFirestore.instance
+                  .collection("Food_items")
+                  .doc(foodId)
+                  .update({
+                "price": _newPrice,
+              });
             }
-            print(_newName);
-            print(_newPrice);
-            Navigator.of(context).pop();
+            Navigator.popUntil(context, (route) => route.isFirst);
           } else {
             /* await FirebaseFirestore.instance
                         .collection("Food_items")
@@ -84,10 +77,9 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
 
       // set up the AlertDialog
       AlertDialog alert = AlertDialog(
-        title: Text("AlertDialog"),
         content: _onEdit
-            ? Text("Press confirm to edit the item")
-            : Text("Press confirm to delete the item"),
+            ? const Text("Press confirm to edit the item")
+            : const Text("Press confirm to delete the item"),
         actions: [
           cancelButton,
           continueButton,
@@ -152,7 +144,6 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                                   ),
                                   onChanged: (value) {
                                     _newName = value;
-                                    print(_newName);
                                   },
                                 )
                               : FittedBox(
@@ -174,8 +165,7 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                                   ),
                                   keyboardType: TextInputType.number,
                                   onChanged: (value) {
-                                    _newPrice = double.parse(value);
-                                    print(_newPrice);
+                                    _newPrice = double.tryParse(value);
                                   },
                                 )
                               : Text(
@@ -198,10 +188,11 @@ class _VendorFoodDetailState extends State<VendorFoodDetail> {
                             if (_newName != null || _newPrice != null) {
                               showAlertDialog(context);
                             }
+                          } else {
+                            setState(() {
+                              _onEdit = !_onEdit;
+                            });
                           }
-                          setState(() {
-                            _onEdit = !_onEdit;
-                          });
                         },
                         child: _onEdit
                             ? const Text("Save")
