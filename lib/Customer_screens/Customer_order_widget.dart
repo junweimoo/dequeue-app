@@ -1,3 +1,4 @@
+import 'package:first_app/Customer_screens/Customer_post_review.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -101,6 +102,7 @@ class Customer_order_widget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            CustomerPostReview(),
           ],
           crossAxisAlignment: CrossAxisAlignment.stretch,
         ),
